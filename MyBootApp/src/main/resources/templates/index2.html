@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>top page</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<style>
+h1 {
+font-size: 18pt;
+font-weight: bold;
+color: gray;
+}
+body {
+font-size: 13pt;
+color: gray;
+margin: 5px 25px;
+}
+pre {
+font-size: 13pt;
+color: gray;
+padding: 5px 10px;
+border: 1px solid gray;
+}
+</style>
+</head>
+<body>
+<h1>Helo page</h1>
+<!--
+Thymeleafでの値の出力に関する設定を行っている
+th:textという属性(attribute)を用意し、そこに${変数名}といった形で変数を埋め込める
+→なのでここでは、${msg}なので、変数msgの値を表示することが出来る。
+ -->
+ <!-- OGNL(Object-Graph Navigation Language)式。Javaの値にアクセスするための式言語 -->
+<p th:text="${new java.util.Date().toString()}"></p>
+<h1>-------------------------------------------------------------------------------</h1>
+<!--
+ユーティリティオブジェクト
+Thymeleafでは、使用頻度の高いクラスを「#名前」という定数として変数式の中に直接記述して利用できる
+下記で使用しているものを説明
+#dates→Dateクラスの定数
+#numbers→Numberクラスの定数
+#strings→Stringクラスの定数
+使い方として、「new #dates」と書いてDateインスタンスを作るということはできない
+あくまで、「dates.○○」というように、クラスフィールドやクラスメソッドの呼び出しなどを行うのに利用する
+-->
+<p th:text="${#dates.format(new java.util.Date(), 'dd/MM/yyyy HH:mm')}"></p>
+<p th:text="${#dates.format(new java.util.Date(), 'YYYY/MM/dd HH:mm:ss')}"></p>
+<!-- 日時の整形。現在日時を、第二引数の書式に変更する -->
+<p th:text="${#numbers.formatInteger(1234,10)}"></p>
+<p th:text="${#numbers.formatInteger(1234,7)}"></p>
+<p th:text="${#numbers.formatInteger(1234567,10)}"></p>
+<!-- 整数の整形。第一引数の値を第二引数の桁表示にする。足りない分は0埋め -->
+<p th:text="${#strings.toUpperCase('Welcome to Spring.')}"></p>
+<p th:text="${#strings.toLowerCase('Welcome to Spring.')}"></p>
+<!-- テキストの整形。toUpperCaseメソッドにより、引数の文字列をすべて大文字に変換する -->
+<!-- テキストの整形。toLowerCaseメソッドにより、引数の文字列をすべて小文字に変換する -->
+<h1>-------------------------------------------------------------------------------</h1>
+<!--
+コントローラークラスを介さずに、直接クエリパラメータをテンプレート内で利用する方法
+paramという変数を使用する。例えば、下記のように、${param.id[0]と記述することで、
+クエリパラメータのうち、id=○○の形で送られてきた値を受け取ることが出来る。
+ちなみに、取り出す形が配列なのは、同じ名前の値を複数受け取ることに対応する為です。
+例えば、http://localhost:8080/tec/?id=456&name=jiro&id=123&name=shiroというアドレスだと
+id[] = {456, 123}, name[] = {jiro, shiro}という形で保管されます。
+-->
+<!--
+テキストリテラルの記述
+複数のリテラルをつなぎ合わせるときは、""の中に、''で囲ったテキストリテラルを記述できる
+-->
+<p th:text="'from parameter..... id = ' + ${param.id[0] + ', name = ' + param.name[0]}"></p>
+<p th:text="'from parameter..... id = ' + ${param.id[1] + ', name = ' + param.name[1]}"></p>
+<h1>-------------------------------------------------------------------------------</h1>
+<!--
+メッセージ式の利用
+${}という変数式以外に利用できる式の1つ。
+あらかじめ用意した、プロパティファイルを読み込み、テンプレート内から直接利用できる。
+式の記述は、「#{値の指定}」
+下記の場合は、作成したmessages.propertiesファイルに用意した、
+content.titleとcontent.messageという名前の値を参照している。
+-->
+<h1 th:text="#{content.title}"></h1>
+<p th:text="#{content.message}"></p>
+</body>
+</html>
