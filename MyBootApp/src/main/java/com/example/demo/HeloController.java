@@ -92,7 +92,7 @@ public class HeloController {
 		return new DataObject(id, names[id], mails[id]);
 	}
 
-	@RequestMapping("/")
+	@RequestMapping("/webpage")
 	public String webpage() {
 		/*
 		 * @Controllerアノテーションを付与した、Controllerクラスのリクエストハンドラ(アドレスに紐づけたメソッド)では
@@ -247,6 +247,8 @@ class DataObject {
 	private int id;
 	private String name;
 	private String value;
+	private int age;
+	private String gender;
 
 	public DataObject(int id, String name, String value) {
 		super();
@@ -277,5 +279,21 @@ class DataObject {
 
 	public void setValue(String value) {
 		this.value = value;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 }
