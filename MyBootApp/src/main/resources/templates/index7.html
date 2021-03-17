@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+<title>top page</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<style>
+h1 {
+font-size: 18pt;
+font-weight: bold;
+color: gray;
+}
+body {
+font-size: 13pt;
+color: gray;
+margin: 5px 25px;
+}
+tr { margin:5px;}
+th { padding:5px; color:white; background:darkgray;}
+td { padding:5px; color:black; background:#f0f0f0;}
+</style>
+</head>
+<body>
+ <h1 th:text="#{content.title}"></h1>
+ <!--
+ インライン処理
+ th:inline="text"と記述したタグの内部で、Thymeleafの変数式を書き込めるというもの
+ 下記の記述では、tableタグに、インライン処理用の属性と値(th:inline="text")を設定している
+ そのため、tableタグ内であれば、2つ目のtrタグの内部のように、直接、変数名とプロパティを指定できる
+ この時、書式として、[[${obj.id}]]のように、[[]]の中に、変数式を記述する
+ これを使用すると、3つ目のtrタグの内部のように、わざわざ1つずつ、th:text=と記述せずに済む
+ -->
+ <table th:inline="text">
+  <tr>
+   <th>ID</th>
+   <th>NAME</th>
+   <th>MAIL</th>
+  </tr>
+  <tr th:each="obj : ${data}">
+   <td>[[${obj.id}]]</td>
+   <td>[[${obj.name}]]</td>
+   <td>[[${obj.value}]]</td>
+  </tr>
+  <tr th:each="obj : ${data}">
+   <td th:text="${obj.id}"></td>
+   <td th:text="${obj.name}"></td>
+   <td th:text="${obj.value}"></td>
+  </tr>
+ </table>
+</body>
+</html>

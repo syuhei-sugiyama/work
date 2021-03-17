@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+<title>top page</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<style>
+h1 {
+font-size: 18pt;
+font-weight: bold;
+color: gray;
+}
+body {
+font-size: 13pt;
+color: gray;
+margin: 5px 25px;
+}
+tr { margin:5px;}
+th { padding:5px; color:white; background:darkgray;}
+td { padding:5px; color:black; background:#f0f0f0;}
+</style>
+</head>
+<body>
+ <h1 th:text="#{content.title}"></h1>
+ <table>
+  <tr>
+   <th>NAME</th>
+   <th>MAIL</th>
+   <th>TEL</th>
+  </tr>
+  <!--
+  繰り返し属性「th:each」
+  th:each="変数 : ${コレクション}"の形で記述
+  コロン(:)の後ろに記述したコレクションから順に値を取り出し、コロンの前に記述した変数へ代入する
+  その変数を、th:each属性を付与したタグの内部で、利用することで、値の出力が行える
+  今回の場合は、まず、th:each属性で、dataという名前のコレクションを受け取るように設定
+  受け取ったコレクションの要素を変数objへ代入し、trタグ内部で、変数objの添え字0～2の値を順番に設定
+  これを、受け取ったコレクションの要素の数だけ繰り返す。
+  呼び出し元のTemplatesEngineControllerクラスのcollectionメソッドでは、
+  String[]を要素に持つ、ArrayListを、dataという名前で設定している。
+  そのため、dataには、ArrayList<String[]>型のオブジェクトが格納される。
+  そこから取り出されるのは、String[]であり、collectionメソッドでは、
+  data.add(new String[]{"taro", "taro@yamada", "090-999-999"});のようにして、
+  String[]の中に、要素を3つ格納している。そのため、取り出すときも、obj[0]という記述になる。
+  -->
+  <tr th:each="obj:${data}">
+   <td th:text="${obj[0]}"></td>
+   <td th:text="${obj[1]}"></td>
+   <td th:text="${obj[2]}"></td>
+  </tr>
+ </table>
+</body>
+</html>

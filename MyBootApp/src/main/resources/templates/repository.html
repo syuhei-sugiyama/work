@@ -1,0 +1,162 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>top page</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<style>
+h1 {
+	font-size: 18pt;
+	font-weight: bold;
+	color: gray;
+}
+
+body {
+	font-size: 13pt;
+	color: gray;
+	margin: 5px 25px;
+}
+
+pre {
+	border: solid 3px #ddd;
+	padding: 10px;
+}
+
+tr {
+	margin: 5px;
+}
+
+th {
+	padding: 5px;
+	color: white;
+	background: darkgray;
+}
+
+td {
+	padding: 5px;
+	color: black;
+	background: #f0f0f0;
+}
+
+.err {
+	color: red;
+}
+
+div {
+	background: yellow;
+}
+</style>
+</head>
+
+<body>
+	<h1 th:text="#{content.title}">Helo page</h1>
+	<p th:text="${msg}"></p>
+	<table>
+		<!--
+	 formタグのinputタグにて、データ送信してる
+	 formタグのmethod属性にて、post通信を設定してる
+	 formタグのaction属性にて、接続先アドレスを指定してる
+	 formタグのth:object属性にて、コントローラーから受け取るorコントローラーへ渡すオブジェクトを指定してる
+	-->
+		<form method="post" action="/repository" th:object="${formModel}">
+			<ul>
+				<!--
+	  「#fields」
+	  	エンティティの各フィールドをバリデーションチェックした結果などがまとめられたオブジェクト
+	  「detailedErrorsメソッド」
+	  	発生したエラーに関する情報をひとまとめのリストとして返すメソッド
+	  th:eachにより、エラーの情報が格納されたリストの数だけ繰り返しを実施
+	  エラーの情報が格納されたリストを変数errorに格納
+	  エラーの情報が格納されたリストの中には、messageというプロパティが存在しており、
+	  発生したエラーメッセージが格納されている。
+	  それを、th:text="${error.message}"で取り出している。
+	  liタグにより、表示するエラーメッセージを、リスト形式で表示する。
+	  li→list itemの略
+	 -->
+				<li th:each="error : ${#fields.detailedErrors()}" class="err"
+					th:text="${error.message}" />
+			</ul>
+			<tr>
+				<td><label for="name">名前</label></td>
+				<!--
+		 inputタグのtype属性にて、送信データを文字列に指定してる
+		 inputタグのname属性にて、送信データのkeyを設定している
+		 inputタグのth:value属性にて、th:object属性で設定したオブジェクトから受け取るvalueのkey指定することで、
+		 紐づくvalueを取得している
+		-->
+				<td>
+					<!--
+	   inputタグ及びdivタブに設定された「th:errorclass」属性について
+	   エラーが発生した際に適用されるクラス名を指定するための属性
+	   今回、th:errorclass="err"と設定し、styleタグの.errでの設定により、エラーが発生したら、テキストが赤色になる
+	  --> <input type="text" name="name" th:value="*{name}"
+					th:errorclass="err" /> <!--
+	   divタグに設定した内容について
+	   th:if="${#fields.hasErrors('name')}"
+	   まず、hasErrorsメソッドを使い、fieldsオブジェクト内に、引数に指定したプロパティのエラーが発生しているかどうか
+	   チェック。発生していた場合は、trueを返す。これを、th:if属性で設定することで、divタグ自体が、
+	   引数に指定したプロパティのエラーが発生した時だけ表示されるようになる。
+	   th:errors="*{name}"
+	   指定したエラーメッセージを表示するための属性
+	   エラーを格納しているオブジェクト(fields)の中から、値に指定したプロパティのエラーメッセージを取得する
+	  -->
+					<div th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+						th:errorclass="err"></div>
+				</td>
+			</tr>
+			<tr>
+				<td><label for="age">年齢</label></td>
+				<td><input type="text" name="age" th:value="*{age}"
+					th:errorclass="err" />
+					<div th:if="${#fields.hasErrors('age')}" th:errors="*{age}"
+						th:errorclass="err"></div></td>
+			</tr>
+			<tr>
+				<td><label for="mail">メール</label></td>
+				<td><input type="text" name="mail" th:value="*{mail}"
+					th:errorclass="err" />
+					<div th:if="${#fields.hasErrors('mail')}" th:errors="*{mail}"
+						th:errorclass="err"></div></td>
+			</tr>
+			<tr>
+				<td><label for="memo">メモ</label></td>
+				<td><textarea name="memo" th:text="*{memo}" cols="20" rows="5"></textarea>
+					<div th:if="${#fields.hasErrors('memo')}" th:errors="*{memo}"
+						th:errorclass="err"></div></td>
+			</tr>
+			<!--
+	 textareaタグによって、文字列入力エリアを作成
+	 cols属性により、横に何文字入力できるかを指定してる
+	 rows属性により、何行分の入力エリアにするのかを指定している
+	-->
+			<tr>
+				<td></td>
+				<td><input type="submit" value="保存" /></td>
+			</tr>
+			<!--
+	 保存ボタンを押下した際の動作
+	 formタグ内の、各inputタグに入力された値が、name属性で設定した値とkey-valueの形で関連付けられ、
+	 th:object属性で設定したformModelという名前のオブジェクトに格納された状態で、
+	 「/repository」というアドレスへ、post通信した際に、呼び出される、コントローラーのメソッドへ渡される。
+	-->
+		</form>
+	</table>
+	<hr />
+	<table>
+		<tr>
+			<th>ID</th>
+			<th>名前</th>
+		</tr>
+		<!--
+	 th:each属性により、設定されたタグ内にて、繰り返し処理が可能
+	 "obj : ${datalist}"→コントローラーから渡されたdatalistというオブジェクトから、要素を取り出し、
+	 その一つ一つの要素をobjという変数で扱う
+	 タグ内では、obj.idという形で、変数objのフィールドへアクセスし、値を取得する
+	-->
+		<tr th:each="obj : ${datalist}">
+			<td th:text="${obj.id}"></td>
+			<td th:text="${obj.name}"></td>
+		</tr>
+	</table>
+</body>
+
+</html>

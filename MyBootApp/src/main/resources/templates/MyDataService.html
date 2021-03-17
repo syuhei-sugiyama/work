@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>top page</title>
+<!-- jQueryのロード。GoogleのCDN(Content Delivery Network)を利用することで、jQueryのインストール等が不要 -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script th:inline="javascript">
+/*
+ページロード時にAjax通信実施
+$(document).ready()は、ドキュメントのロード完了時に実行される処理を用意
+引数に指定された処理について
+1行目
+変数numに、クエリーテキストからIDの値を取り出して設定している
+クエリーテキストで渡されたパラメータの値をThymeleafの変数式で、IDの値を取り出している
+そのあと、2行目のjQueryの機能である$.getによって、指定したアドレスにAjax通信を開始する
+実行後、第三引数に指定した関数が呼び出される
+*/
+$(document).ready(function(){
+	var num = /*[[${param.id[0]}]]*/;
+	$.get("/mydatarest/" + num, null, callback);
+});
+/*
+ 上記のAjax通信が完了した後に呼び出される
+ 引数のresultは、Ajax通信の結果が格納されているプロパティ
+ されにそこから指定の値を取り出す際は、下記のように、result.○○と記述する
+ jQueryのappendメソッドにより、指定した対象(今回はobj)にテキストを挿入する
+ */
+function callback(result){
+	$('#obj').append('<li>id:' + result.id + '</li>');
+	$('#obj').append('<li>name:' + result.name + '</li>');
+	$('#obj').append('<li>mail:' + result.mail + '</li>');
+	$('#obj').append('<li>age:' + result.age + '</li>');
+	$('#obj').append('<li>memo:' + result.memo + '</li>');
+}
+</script>
+<style>
+h1 {
+	font-size: 18pt;
+	font-weight: bold;
+	color: gray;
+}
+
+body {
+	font-size: 13pt;
+	color: gray;
+	margin: 5px 25px;
+}
+
+tr {
+	margin: 5px;
+}
+
+th {
+	padding: 5px;
+	color: white;
+	background: darkgray;
+}
+
+td {
+	padding: 5px;
+	color: black;
+	background: #f0f0f0;
+}
+
+.err {
+	color: red;
+}
+</style>
+</head>
+<body>
+	<h1 th:text="#{content.title}">Helo page</h1>
+	<p th:text="${msg}"></p>
+	<ol id="obj"></ol>
+	<table>
+		<tr>
+			<th>ID</th>
+			<th>名前</th>
+			<th>メール</th>
+			<th>年齢</th>
+			<th>メモ(tel)</th>
+		</tr>
+		<tr th:each="obj : ${datalist}">
+			<td th:text="${obj.id}"></td>
+			<td th:text="${obj.name}"></td>
+			<td th:text="${obj.mail}"></td>
+			<td th:text="${obj.age}"></td>
+			<td th:text="${obj.memo}"></td>
+		</tr>
+	</table>
+</body>
+</html>

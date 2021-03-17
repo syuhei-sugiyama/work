@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+<title>top page</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<style>
+h1 {
+font-size: 18pt;
+font-weight: bold;
+color: gray;
+}
+body {
+font-size: 13pt;
+color: gray;
+margin: 5px 25px;
+}
+tr { margin:5px;}
+th { padding:5px; color:white; background:darkgray;}
+td { padding:5px; color:black; background:#f0f0f0;}
+</style>
+</head>
+<body>
+ <!-- プロパティファイルからcontent.titleの値を設定 -->
+ <h1 th:text="#{content.title}"></h1>
+ <!-- コントローラークラスから渡された値のうち、変数msg用に設定された値を表示 -->
+ <p th:text="${msg}">message.</p>
+ <!--
+ th:object属性
+ コントローラークラスから渡されたオブジェクトを扱うための属性
+ 任意のタグに、th:object属性を設定することで、そのタグ内部で、オブジェクト内の値を扱える
+ オブジェクト内の値を扱う際は、*{}という変数式を利用する。
+ 下記を参考にした場合、まずコントローラークラスからは、DataObjectクラスのオブジェクトが、
+ objectという名前と紐づけて、このテンプレートに渡される。
+ th:object属性にて、"${object}"と指定している為、tableタグ内で、DataObjectクラスのオブジェクト内の値を扱える
+ 元々、DataObjectクラスは、id、name、valueという3つのクラスフィールドを保持しており、
+ DataObjectクラスのオブジェクトを生成する際に、それぞれの値を設定した上で、テンプレートに渡されている。
+ なので、それらの値をtableタグ内で使用するために、オブジェクト内の値を扱うための変数式*{}を使って、
+ それぞれ、id、name、valueという名前を指定して値を取得している。
+ -->
+ <table th:object="${object}">
+  <tr><th>ID</th><td th:text="*{id}"></td></tr>
+  <tr><th>NAME</th><td th:text="*{name}"></td></tr>
+  <tr><th>MAIL</th><td th:text="*{value}"></td></tr>
+  <tr><th>AGE</th><td th:text="*{age}"></td></tr>
+  <tr><th>GENDER</th><td th:text="*{gender}"></td></tr>
+ </table>
+ <div th:object="${object}">
+  <!--
+  リテラル置換
+  「"|テキストの内容|"」という形で、""の中に、|で挟む形をとる。
+  その中に、リテラル値も、変数式も直接記述できる。
+  -->
+  <p th:text="|my name is *{name}. mail address is *{value}.|"></p>
+ </div>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+ <title>part page</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+ <style>
+  h1 {font-size: 18pt; font-weight: bold; color: gray;}
+  body {font-size: 13pt; color: gray; margin: 5px 25px;}
+ </style>
+ <style th:fragment="frag_style">
+  div.fragment {
+   border: solid 3px red;
+   padding: 0px 20px;
+  }
+ </style>
+</head>
+<body>
+<!--
+ テンプレートフラグメント
+ 複数のファイルを組み合わせてページを構成する際に利用する
+ フラグメント(ページを構成する部品)として記述された部分を、別のテンプレートの指定した場所にはめ込める
+ 部品となるテンプレート側
+ 「th:fragment="フラグメント名"」を、部品としたいタグへ設定する。
+ 今回は、"frag_style"と"frag_body"という2つのフラグメントを用意。
+ フラグメントは、1つのファイル内でいくつも作成、指定できる。
+-->
+ <h1>Part page</h1>
+ <div th:fragment="frag_body">
+  <h2>fragment</h2>
+  <div class="fragment">
+   <p>this is fragment content.</p>
+   <p>sample message.....</p>
+  </div>
+ </div>
+</body>
+</html>

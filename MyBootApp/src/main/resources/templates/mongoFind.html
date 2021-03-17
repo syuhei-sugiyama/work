@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>top page</title>
+<style>
+h1 {
+	font-size: 18pt;
+	font-weight: bold;
+	color: gray;
+}
+
+body {
+	font-size: 13pt;
+	color: gray;
+	margin: 5px 25px;
+}
+
+tr {
+	margin: 5px;
+}
+
+th {
+	padding: 5px;
+	color: white;
+	background: darkgray;
+}
+
+td {
+	padding: 5px;
+	color: black;
+	background: #f0f0f0;
+}
+
+.err {
+	color: red;
+}
+
+table.navi {
+	width: 100%;
+	background: white;
+}
+
+table.navi tr {
+	background: white;
+}
+
+table.navi tr td {
+	background: white;
+}
+</style>
+</head>
+<body>
+	<h1 th:text="#{content.title}">Helo page</h1>
+	<p th:text="${msg}"></p>
+	<p><a href="/mongo">保存ページへ移動</a></p>
+	<table>
+		<form method="post" action="/mongoFind">
+			<tr>
+				<td>名前検索:</td>
+				<td><input type="text" name="find" size="20" th:value="${value}" /></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><input type="submit" value="検索" /></td>
+			</tr>
+		</form>
+	</table>
+	<hr />
+	<table>
+		<tr>
+			<th>名前</th>
+			<th>メモ</th>
+			<th>日時</th>
+		</tr>
+		<tr th:each="obj : ${datalist}">
+			<td th:text="${obj.name}"></td>
+			<td th:text="${obj.memo}"></td>
+			<td th:text="${obj.date}"></td>
+		</tr>
+	</table>
+</body>
+</html>

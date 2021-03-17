@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+<title>top page</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<style>
+h1 {
+font-size: 18pt;
+font-weight: bold;
+color: gray;
+}
+body {
+font-size: 13pt;
+color: gray;
+margin: 5px 25px;
+}
+tr { margin:5px;}
+th { padding:5px; color:white; background:darkgray;}
+td { padding:5px; color:black; background:#f0f0f0;}
+</style>
+</head>
+<body>
+ <h1 th:text="#{content.title}"></h1>
+ <!--
+ 条件式
+ Javaの三項演算子と同じような記述
+ "変数式 ? 値1 : 値2"
+ 変数式を評価し、trueなら値1、falseなら値2を表示する
+ 変数式には、必ず真偽値(true/false)を用いる
+ -->
+ <p th:text="${id} + ' is ' + (${check} ? ${trueVal} : ${falseVal})"></p>
+ <!--
+ 条件分岐のth:if/th:unless
+ 制御用の属性。値として設定したものが、trueの場合は、th:if属性を設定したタグの内容を、
+ falseの場合は、th:unless属性を設定したタグの内容が画面に表示される。
+ -->
+ <p th:if="${check}" th:text="${id} + ' is ' + ${trueVal}"></p>
+ <p th:unless="${check}" th:text="${id} + ' is ' + ${falseVal}"></p>
+</body>
+</html>

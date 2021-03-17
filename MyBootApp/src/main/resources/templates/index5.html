@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+<title>top page</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<style>
+h1 {
+font-size: 18pt;
+font-weight: bold;
+color: gray;
+}
+body {
+font-size: 13pt;
+color: gray;
+margin: 5px 25px;
+}
+tr { margin:5px;}
+th { padding:5px; color:white; background:darkgray;}
+td { padding:5px; color:black; background:#f0f0f0;}
+</style>
+</head>
+<body>
+ <h1 th:text="#{content.title}"></h1>
+ <!--
+ 多項分岐のth:switch
+ 3つ以上に分岐をさせたい場合に使用
+ th:switch="条件式"の形で属性を設定
+ 内側のタグには、th:case="条件式"の形で属性を設定
+ コントローラークラスから渡された、checkという変数に紐づく値を判定
+ 合致するth:case属性のタグに設定された内容を画面へ表示する
+ 最後の、th:case="*"属性は、どの条件にも合致しなかった場合の分岐
+ Javaのswitchにおけるdefault:に相当するもの
+ -->
+ <div th:switch="${check}">
+  <p th:case="0" th:text="|${month} - Winter|"></p>
+  <p th:case="1" th:text="|${month} - Spring|"></p>
+  <p th:case="2" th:text="|${month} - Summer|"></p>
+  <p th:case="3" th:text="|${month} - Autum|"></p>
+  <p th:case="4" th:text="|${month} - Winter|"></p>
+  <p th:case="*">.....?</p>
+ </div>
+</body>
+</html>
