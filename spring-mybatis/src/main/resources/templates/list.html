@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<!--
+Thymeleaf(タイムリーフ)
+Spring Bootで推奨されているテンプレートエンジン
+<html>タグに「xmlns:th="http://www.thymeleaf.org"」を付けて利用
+-->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<!--
+th:block
+HTMLとして出力しないタグThymeleafの処理だけに使える
+th:insert
+他のHTML(フラグメント)を挿入する。
+下記の場合だと、
+「frafments/base.htmlのheader部分(=「th:fragment="header"」を設定した部分)を挿入する」
+という意味になる
+「th:insert="frafments/base"」と記述すれば、HTML全体を挿入することもできる
+-->
+<th:block th:insert="fragments/base :: header"></th:block>
+</head>
+<body>
+	<div class="container-fluid">
+		<h4>MyBatis APP</h4>
+		<!--
+		th:if
+		if文の条件式を書くことができる
+		下記の場合、件数が0件を超えていれば、表示するという意味
+		-->
+		<table th:if="${page.totalPages > 0}" class="table">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>名前</th>
+					<th>E-Mail</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<!--
+				th:each
+				繰り返し処理を行える
+				下記の場合、${page}から1件ずつオブジェクトを取り出し、変数teacherに格納できる
+				th:object
+				フォームにバインドする(=関連付ける)オブジェクトを設定する
+				th:object属性を付与したタグ内であれば、オブジェクト名を省略して、下記のように
+				*{フィールド名}と記述することで、オブジェクト内のフィールドを指定できる
+				-->
+				<tr th:each="teacher : ${page}" th:object="${teacher}">
+					<td th:text="*{id}"></td>
+					<td th:text="*{userName}"></td>
+					<td th:text="*{email}"></td>
+					<!--
+					th:href
+					参照先を、リンクURL式「@{...}」で指定
+					下記のように記述すると、idを格納したリンクを作成する
+					例えば下記のように「"@{/edit/{id}(id=*{id})}"」と記述した場合
+					出力されるHTMLには「href="/edit/1"」というリンクが設定される
+					/edit/{id}の{id}によって、/edit/に続く値の変数名をidとしている
+					つづく「(id=*{id})」より、*{id}によって、teacherオブジェクトのidの値を指定し
+					かつ、「id=」ということで、変数idに代入するということになる
+					-->
+					<td class="py-1"><a th:href="@{/edit/{id}(id=*{id})}"
+						class="btn btn-outline-primary"> <i class="fa fa-pencil"></i>
+							編集
+					</a> <a th:href="@{/delete/{id}(id=*{id})}"
+						class="btn btn-outline-danger"> <i class="fa fa-trash"></i> 削除
+					</a></td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="row">
+			<div class="col-auto mr-auto">
+				<a th:href="@{/add}" class="btn btn-outline-primary"> <i
+					class="fa fa-plus"></i> 新規追加
+				</a>
+			</div>
+			<!-- ページネーションを追加 -->
+			<th:block th:insert="fragments/pagination :: pagination"></th:block>
+		</div>
+	</div>
+	<th:block th:insert="fragments/base :: scripts"></th:block>
+</body>
+</html>

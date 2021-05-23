@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Title</title>
+</head>
+<body>
+	<!--
+	標準で、/logoutへ遷移するとログアウトできる
+	この時、GETとPOSTで、以下の違いあり
+	GET・・・ログアウトの確認メッセージを表示できる
+	POST・・・そのままログアウトできる
+	-->
+	<h2>ログイン成功</h2>
+	<a th:href="@{/logout}">ログアウトの確認メッセージへ</a>
+	<br>
+	<form th:action="@{/logout}" method="post">
+		<button>ログアウトする</button>
+	</form>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <th:block th:insert="fragments/base :: header"></th:block>
+</head>
+<body id="page-top">
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+    <th:block th:insert="fragments/sidebar :: sidebar"></th:block>
+
+    <!-- Main -->
+    <div id="content-wrapper" class="d-flex flex-column">
+      <div id="content">
+        <div class="container-fluid">
+
+          <!-- DataTables -->
+          <div class="card shadow my-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">
+               社員一覧
+              </h6>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+
+                <div th:if="${employees.size() == 0}">
+                  該当データがありません
+                </div>
+
+                <table class="table table-bordered"
+                  th:if="${employees.size() > 0}">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>名前</th>
+                      <th>部署名</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr th:each="employee : ${employees}"
+                      th:object="${employee}">
+                      <td th:text="*{id}"></td>
+                      <td th:text="*{name}"></td>
+                      <td th:text="*{department.name}"></td>
+                      <td>
+                        <a th:href="@{/edit/{id}(id=*{id})}"
+                          class="btn btn-primary btn-icon-split">
+                          <span class="icon text-white-50">
+                            <i class="fas fa-trash"></i>
+                          </span>
+                          <span class="text">編集</span>
+                        </a>
+
+                        <a th:href="@{/delete/{id}(id=*{id})}"
+                          class="btn btn-danger btn-icon-split">
+                          <span class="icon text-white-50">
+                            <i class="fas fa-trash"></i>
+                          </span>
+                          <span class="text">削除</span>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <!-- End of Main -->
+  </div>
+
+  <th:block th:insert="fragments/base :: scripts"></th:block>
+</body>
+</html>

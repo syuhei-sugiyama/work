@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<th:block th:insert="fragments/base :: header"></th:block>
+</head>
+<body>
+<div class="container-fluid">
+<h4>MyBatis APP</h4>
+<!--
+th:action
+フォームのPOST先を「@{パス名}」で指定する
+-->
+<form th:action="@{/process}" th:object="${teacher}" method="post" novalidate>
+<input type="hidden" th:field="*{id}" />
+<div class="form-group">
+<label for="userName">名前 : </label>
+<!--
+th:errorclass="スタイル"
+エラーがある場合に、class属性にスタイルを追加する
+エラーのチェックはth:fieldまたはname属性から取得するため、これらと一緒に使う必要がある
+th:field
+フィールドを設定する
+これは、<input>タグのid・name・value属性を、HTMLに出力する機能
+-->
+<input type="text" class="form-control" th:errorclass="is-invalid" th:field="*{userName}" />
+<!--
+th:errors
+エラーがある場合に、エラーメッセージを表示する
+-->
+<div class="invalid-feedback" th:errors="*{userName}"></div>
+</div>
+<div class="form-group">
+<label for="email">E-Mail : </label>
+<input type="email" class="form-control" th:errorclass="is-invalid" th:field="*{email}" />
+<div class="invalid-feedback" th:errors="*{email}"></div>
+</div>
+<button class="btn btn-outline-primary px-5">
+<i class="fa fa-file"></i>
+保存
+</button>
+</form>
+</div>
+<th:block th:insert="fragments/base :: scripts"></th:block>
+</body>
+</html>

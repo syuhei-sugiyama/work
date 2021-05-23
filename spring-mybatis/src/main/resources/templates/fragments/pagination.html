@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+	<th:block th:fragment="pagination">
+		<div th:if="${page.totalPages > 0}" class="col-auto">
+			<nav>
+				<ul class="pagination">
+					<!--
+					page.hasPrevious()
+					前ページが存在する場合、trueを返す
+					th:ifと組み合わせることで、前ページが存在する場合に、タグを表示できる
+					page.number
+					現在のページ番号
+					前ページは「現在のページ - 1」なので、「page.number - 1」と記述している
+					-->
+					<li th:if="${page.hasPrevious()}" class="page-item"><a
+						class="page-link" th:href="@{/(page=${page.number - 1})}">前へ</a></li>
+					<!--
+					numbers.sequence
+					Thymeleafのユーティリティメソッド
+					第一引数から第二引数までの連番を作成する
+					ページは「0」から始まるので、最大ページは「合計ページ数 - 1」となる
+					そのため、以下のように、「page.totalPages - 1」と記述することで
+					「0」から「最大ページ」までを繰り返すことができる
+					-->
+					<!--
+					th:switch
+					条件文の1つ。switch-case。
+					「th:case="${i}"」は、「page.number == i」を表す
+					「th:case="*"」は、他の条件以外(javaでいうdefault)を表す
+					-->
+					<th:block
+						th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
+						th:switch="${page.number}">
+						<li th:case="${i}" class="page-item active"><a
+							class="page-link" th:text="${i + 1}"></a></li>
+						<li th:case="*" class="page-item"><a class="page-link"
+							th:href="@{/(page=${i})}" th:text="${i + 1}"></a></li>
+					</th:block>
+					<!--
+					page.hasNext()
+					次ページが存在する場合、trueを返す
+					次ページは、「現在のページ番号 + 1」なので
+					「page.number + 1」と記述する
+					-->
+					<li th:if="${page.hasNext()}" class="page-item"><a
+						class="page-link" th:href="@{/(page=${page.number + 1})}">次へ</a></li>
+				</ul>
+			</nav>
+		</div>
+	</th:block>
+</body>
+</html>

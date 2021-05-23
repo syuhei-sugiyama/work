@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dev.itboot.mb.mapper.TeacherMapper">
+	<!-- SQL文は、<select>などのタグ内に記述する この時、idはjava側のメソッド名と一致させる resultType 結果の型を指定するための属性
+		コレクション(Listなど)を返す場合は、中に含まれるオブジェクト (List<Teacher>をjava側のメソッドの戻り値としていた場合はTeacher)を指定する -->
+	<select id="selectAll" resultType="Teacher">
+		select * from teacher
+	</select>
+	<select id="selectByPrimaryKey" resultType="Teacher">
+		select * from teacher
+		where id = #{id}
+	</select>
+	<insert id="insert">
+		insert into teacher(user_name, email)
+		values(#{userName}, #{email})
+	</insert>
+	<update id="updateByPrimaryKey">
+		update teacher
+		set user_name = #{userName}, email =
+		#{email}
+		where id = #{id}
+	</update>
+	<delete id="deleteByPrimaryKey">
+		delete from teacher
+		where id = #{id}
+	</delete>
+	<select id="count" resultType="Long">
+		select count(*) from teacher
+	</select>
+</mapper>

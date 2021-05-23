@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Title</title>
+</head>
+<body>
+<!--
+th:action属性
+フォームのPOST先を指定する
+@{...}はリンクURL式、${...}は変数式という
+ -->
+	<form th:action="@{/confirm}" method="post">
+		<label>メッセージ : </label> <input type="text" name="message" />
+		<button>送信</button>
+	</form>
+</body>
+</html>
