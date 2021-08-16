@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+	<!-- サイドバー折りたたみ時のトグルボタン -->
+	<!-- th:fragment・・・Thymeleafのフラグメント。際との共通部品を外出し出来る。
+	外から呼び出す時は、th:fragment=の後に記載した名前を指定する-->
+
+	<div th:fragment="toggler">
+		<nav class="navbar navbar-expand-lg navbar-light">
+			<div class="container-fluid">
+				<button class="navbar-toggler" type="button"
+					data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling"
+					aria-controls="offcanvasScrolling" aria-expanded="false"
+					aria-label="Toggle offcanvas">
+					<span class=""></span>
+				</button>
+			</div>
+		</nav>
+	</div>
+</body>
+</html>

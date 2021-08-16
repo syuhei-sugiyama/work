@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
+<head>
+<meta charset="UTF-8" th:remove="tag">
+<title>Insert title here</title>
+</head>
+<body>
+<!--
+Spring Bootは、共通のエラーページ「error.html」を作成すると、
+エラー発生時に呼び出してくれる。
+この時、以下の2つの変数には、エラーが格納されている
+・${status}→エラー時のステータスコード
+・${error}→エラーメッセージ
+個別のエラーページを作成したい場合は、
+templatesフォルダ配下にerrorというフォルダを作成し、
+その中に、「エラーコード.html」というファイル名のファイルを設置すると
+呼び出してくれる。(404.htmlとか503.htmlとか)
+-->
+	<!-- コンテンツの表示 -->
+	<div layout:fragment="content">
+		<main class="offcanvas-outside bg-light vh-100">
+		<div class="container-fluid">
+			<!-- トグルボタン -->
+			<div th:replace="~{fragments/sidebar :: toggler}"></div>
+			<div class="row mh-100 align-items-center justify-content-center">
+				<div class="text-center">
+					<div class="display-1" th:text="${error}"></div>
+					<div class="text-muted">ページを表示できません</div>
+					<a th:href="@{/}">&larr;ホームに戻る</a>
+				</div>
+			</div>
+		</div>
+		</main>
+	</div>
+</body>
+</html>

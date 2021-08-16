@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
+	<!--
+	layout:decorate・・・埋め込み元となるレイアウトを指定する
+	今回の場合、layout/layout.htmlを指定したことになる
+	xmlns:layoutの宣言により、Thymeleaf Layout Dialectの機能が使える
+	layout:decorateで指定した埋め込み元に対して、
+	layout:fragment属性で指定した内容を埋め込むことができる
+	-->
+<head>
+<meta charset="UTF-8" th:remove="tag">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<!-- コンテンツの表示 -->
+	<div layout:fragment="content">
+		<main class="offcanvas-outside bg-light">
+		<div class="container-fluid">
+			<!-- トグルボタン -->
+			<!-- Thymeleafにもフラグメント(th:fragment)があり、サイトの共通部品を
+			外出しできる。使用する場合は、th:replace(置き換え)かth:insert(挿入)を使う
+			下記の記述により、fragments/sidebar.htmlのフラグメント(toggler})に置き換える-->
+			<div th:replace="~{fragments/sidebar :: toggler}"></div>
+			<div class="row">
+				<div class="col">
+					<div class="card shadow">
+						<div class="card-header">
+							<h6 class="text-navy my-2">社員一覧</h6>
+						</div>
+						<div class="card-body">
+							<div th:if="${employees.size() == 0}">該当データがありません</div>
+							<table th:if="${employees.size() > 0}"
+								class="table table-bordered">
+								<thead>
+									<tr>
+										<th>#</th>
+										<th>苗字</th>
+										<th>名前</th>
+										<th>性別</th>
+										<th>部署名</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="employee : ${employees}" th:object="${employee}">
+										<td th:text="*{id}"></td>
+										<td th:text="*{firstName}"></td>
+										<td th:text="*{lastName}"></td>
+										<td th:text="*{sex}"></td>
+										<td th:text="*{department.name}"></td>
+										<!--
+										1行毎に編集と削除のリンク作成される
+										出力されるHTMLは以下のイメージ
+										<a href="/edit/2"...>
+										<a href="/delete/2"...>
+										編集のほうだけ説明
+										ベースとなるのが、「/edit/」の部分
+										その後ろに「{id}」で変数idを指定していて、
+										かつその後ろで「(id=*{id})」と記述することで
+										左辺のidはリンクに使う{id}を指していて、
+										右辺がこの繰り返しの中で、employeeから取得できるidを指してる
+										-->
+										<td><a th:href="@{/edit/{id}(id=*{id})}"
+											class="btn btn-navy"> <i class="bi bi-pencil-square"></i>編集
+										</a> <a th:href="@{/delete/{id}(id=*{id})}" class="btn btn-danger">
+												<i class="bi bi-trash-fill"></i>削除
+										</a></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		</main>
+	</div>
+
+</body>
+</html>

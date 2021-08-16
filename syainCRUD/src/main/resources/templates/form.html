@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
+<head>
+<meta charset="UTF-8" th:remove="tag">
+</head>
+<body>
+	<!-- コンテンツの表示 -->
+	<div layout:fragment="content">
+		<main class="offcanvas-outside bg-light">
+		<div class="container-fluid">
+			<!-- トグルボタン -->
+			<div th:replace="~{fragments/sidebar :: toggler}"></div>
+			<div class="row">
+				<div class="col">
+					<div class="card shadow">
+						<div class="card-header">
+							<h6 class="text-navy my-2">社員登録</h6>
+						</div>
+						<div class="card-body">
+							<form th:action="@{/process}" th:object="${employee}"
+								method="post">
+								<input type="hidden" th:field="*{id}">
+								<div class="mb-3">
+									<label for="firstName">苗字</label> <input type="text"
+										class="form-control" th:errorclass="is-invalid"
+										th:field="*{firstName}">
+									<div class="invalid-feedback" th:errors="*{firstName}"></div>
+								</div>
+								<div class="mb-3">
+									<label for="lastName">名前</label> <input type="text"
+										class="form-control" th:errorclass="is-invalid"
+										th:field="*{lastName}">
+									<div class="invalid-feedback" th:errors="*{lastName}"></div>
+								</div>
+								<div class="mb-3">
+									<label for="sex">性別</label> <input type="text"
+										class="form-control" th:errorclass="is-invalid"
+										th:field="*{sex}">
+									<div class="invalid-feedback" th:errors="*{sex}"></div>
+								</div>
+								<div class="mb-3">
+									<label for="department">部署名</label> <select class="form-select"
+										th:field="*{department}">
+										<!--
+										th:block・・・HTMLとして出力しないタグ
+										Thymeleafの処理だけに使える
+										${@...}・・・SpringのBeanを参照できる
+										Spring(IoCコンテナ)が管理しているオブジェクトをBeanと呼ぶ
+										リポジトリなどはBeanに登録されているので、以下で参照できる
+										「departmentRepository.findAll()で部門の全てを取得し、
+										1件ずつidとnameを設定する」
+										↓
+										<th:block
+										th:each="department : ${@departmentRepository.findAll()}">
+										<option th:value="${department.id}"
+										th:text="${department.name}"></option>
+										</th:block>
+										-->
+										<th:block
+											th:each="department : ${@departmentRepository.findAll()}">
+											<option th:value="${department.id}"
+												th:text="${department.name}"></option>
+										</th:block>
+									</select>
+								</div>
+								<hr>
+								<button class="btn btn-navy col-4">
+									<i class="bi bi-pencil-square"></i> <span class="text">保存</span>
+								</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		</main>
+	</div>
+</body>
+</html>
