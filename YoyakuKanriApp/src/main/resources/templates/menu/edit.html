@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
+<head>
+<meta charset="UTF-8" th:remove="tag">
+<title>メニュー更新画面</title>
+</head>
+<body>
+	<!-- サイドバーの表示 -->
+	<div layout:fragment="sidebar"
+		th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+	<!-- コンテンツの表示 -->
+	<main layout:fragment="content" class="bg-light vh-100">
+	<!-- トグルボタン -->
+	<div th:replace="~{fragments/sidebar :: toggler}"></div>
+	<div class="container pt-4">
+		<!-- 左右中央に配置 -->
+		<div class="row justify-content-center">
+			<div class="card shadow" style="max-width: 480px;">
+				<div class="card-body">
+					<h3 class="card-title mb-3 text-center text-navy">メニュー更新</h3>
+					<div th:if="${validationError}"
+						th:each="error : ${validationError}">
+						<!--
+						th:if属性を使用する際に、上記のように、コントローラーから渡されるオブジェクトのkeyのみを指定することで
+						渡されるオブジェクトの存在チェック的なことができる。なので上記で言えば、コントローラーから
+						渡されたオブジェクトの中に、keyが"validationError"と設定されてるものがあるかどうかという意味になる。
+						-->
+						<label class="text-danger" th:text="${error}"></label>
+					</div>
+					<form th:action="@{/menu/update}" th:object="${formMenu}" method="post"
+						novalidate>
+
+						<div class="mb-3">
+							<label for="menuName" class="form-label">メニュー名</label>
+							<div th:text="*{menuName}"></div>
+						</div>
+
+						<div class="mb-3">
+							<label for="price" class="form-label"> <span
+								class="badge bg-danger">必須</span> 料金
+							</label> <input class="form-control" type="number"
+								th:errorclass="is-invalid" th:field="*{price}" min="0" max="15000">
+							<div class="invalid-feedback" th:errors="*{price}"></div>
+						</div>
+
+						<div class="mb-3">
+							<label for="requiredTime" class="form-label"> <span
+								class="badge bg-danger">必須</span> 所要時間
+							</label> <input class="form-control" type="number"
+								th:errorclass="is-invalid" th:field="*{requiredTime}" min="10" max="60">
+							<div class="invalid-feedback" th:errors="*{requiredTime}"></div>
+						</div>
+
+						<input type="hidden" th:field="*{menuId}">
+						<input type="hidden" th:field="*{menuName}">
+
+						<button class="w-100 btn btn-navy" type="submit">更新</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	</main>
+
+</body>
+</html>

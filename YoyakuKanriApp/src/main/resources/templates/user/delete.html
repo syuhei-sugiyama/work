@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
+<head>
+<meta charset="UTF-8" th:remove="tag">
+<title>ユーザ削除確認画面</title>
+</head>
+<body>
+	<!-- サイドバーの表示 -->
+	<div layout:fragment="sidebar"
+		th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+	<!-- コンテンツの表示 -->
+	<main layout:fragment="content" class="bg-light vh-100">
+	<!-- トグルボタン -->
+	<div th:replace="~{fragments/sidebar :: toggler}"></div>
+	<div class="container pt-4">
+		<!-- 左右中央に配置 -->
+		<div class="row justify-content-center">
+			<div class="card shadow" style="max-width: 480px;">
+				<div class="card-body">
+					<h3 class="card-title mb-3 text-center text-navy">ユーザ削除確認</h3>
+					<form th:action="@{/user/delete}" th:object="${user}" method="post"
+						novalidate>
+
+						<div class="mb-3">
+							<label for="userId" class="form-label">ユーザID</label>
+							<div th:text="*{userId}" class="fw-bold"></div>
+						</div>
+
+						<div class="mb-3">
+							<label for="role" class="form-label">権限</label>
+							<div th:text="*{role}" class="fw-bold"></div>
+						</div>
+
+						<input type="hidden" th:field="*{userId}">
+
+						<button class="w-100 btn btn-navy" type="submit">削除</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	</main>
+
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
+<head>
+<meta charset="UTF-8" th:remove="tag">
+
+<!-- fullcalendar -->
+<link th:href="@{/fullcalendar/lib/main.css}" rel="stylesheet">
+<script th:src="@{/fullcalendar/lib/main.js}"></script>
+
+<script>
+	function dateToStr24HPad0(date, format) {
+		if(!format) {
+			format = 'YYYY-MM-DD hh:mm';
+		}
+		format = format.replace(/YYYY/g, date.getFullYear());
+		format = format.replace(/MM/g, ('0' + (date.getMonth() + 1)).slice(-2));
+		format = format.replace(/DD/g, ('0' + date.getDate()).slice(-2));
+		format = format.replace(/hh/g, ('0' + date.getHours()).slice(-2));
+		format = format.replace(/mm/g, ('0' + date.getMinutes()).slice(-2));
+		return format;
+	}
+
+	document.addEventListener('DOMContentLoaded', function() {
+		// 初期処理
+		var calendarE1 = document.getElementById('calendar');
+		var calendar = new FullCalendar.Calendar(calendarE1, {
+			// 各種オプション記載箇所
+			// カレンダー上のツールバーのボタン配置
+			headerToolbar : {
+				left : 'prev today next',
+				center : 'title',
+				right : 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+			},
+			// カレンダー内の日付をクリックした時、日表示に遷移するかどうか
+			navLinks : true,
+			// 休日を表示するかどうか
+			businessHours : true,
+			// イベントを編集できるかどうか
+			editable : true,
+			// カレンダーに表示する文字の言語選択
+			locale : 'ja',
+			events : {
+				url : '/api/event/all'
+			},
+			// 日付をクリックした際の動作
+			dateClick : function(info) {
+				if(confirm('予約新規登録画面へ移動しますか？')) {
+					window.location.href = "http://localhost:8080/yoyaku/add/" + dateToStr24HPad0(new Date(info.date), 'YYYY-MM-DD hh:mm');
+				}
+			},
+			eventDidMount : function(arg) {
+			}
+		});
+		// 画面にレンダリング
+		calendar.render();
+	});
+</script>
+<title>予約管理画面</title>
+</head>
+<body>
+
+	<!-- サイドバーの表示 -->
+	<div layout:fragment="sidebar"
+		th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+	<!-- コンテンツの表示 -->
+	<main layout:fragment="content" class="offcanvas-outside bg-light">
+	<div class="container-fluid">
+		<!-- トグルボタン -->
+		<div th:replace="~{fragments/sidebar :: toggler}"></div>
+		<h6 class="text-navy my-2">予約管理</h6>
+		<hr>
+		<div id='calendar'></div>
+	</div>
+	</main>
+</body>
+</html>

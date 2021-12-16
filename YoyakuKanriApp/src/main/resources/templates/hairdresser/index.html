@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
+<head>
+<meta charset="UTF-8" th:remove="tag">
+
+<title>美容師検索画面</title>
+</head>
+<body>
+
+	<!-- サイドバーの表示 -->
+	<div layout:fragment="sidebar"
+		th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+	<!-- コンテンツの表示 -->
+	<main layout:fragment="content" class="offcanvas-outside bg-light">
+	<div class="container-fluid">
+		<!-- トグルボタン -->
+		<div th:replace="~{fragments/sidebar :: toggler}"></div>
+		<h6 class="text-navy my-2">美容師検索</h6>
+		<div th:text="${userid}"></div>
+		<p></p>
+		<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+			<form th:action="@{/hairdresser/register}" method="get">
+				<button type="submit" class="btn btn-primary me-md-2">新規登録</button>
+			</form>
+		</div>
+		<hr>
+		<form th:action="@{/hairdresser/search}" th:object="${formInfo}" method="post"
+			novalidate>
+			<div class="mb-3">
+				<label>美容師名：</label> <input type="text" th:field="*{hairdresserName}" th:errorclass="is-invalid">
+				<div class="invalid-feedback" th:errors="*{hairdresserName}"></div>
+			</div>
+			<p></p>
+			<button class="btn btn-navy" type="submit">検索</button>
+		</form>
+		<hr>
+		<div th:if="${hairdressers}">
+			<div th:if="${hairdressers.size() == 0}">該当データがありません</div>
+			<table class="table table-bordered" th:if="${hairdressers.size() > 0}">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>美容師名</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="hairdresser : ${hairdressers}" th:object="${hairdresser}">
+						<td th:text="*{hairdresserId}"></td>
+						<td th:text="*{hairdresserName}"></td>
+						<td><a
+							th:href="@{/hairdresser/edit/{id}(id=*{hairdresserId})}"
+							class="btn btn-primary btn-icon-split"> <span
+								class="icon text-white-50"> <i class="fas fa-trash"></i>
+							</span> <span class="text">編集</span>
+						</a> <a th:href="@{/hairdresser/delete/{id}(id=*{hairdresserId})}"
+							class="btn btn-danger btn-icon-split"> <span
+								class="icon text-white-50"> <i class="fas fa-trash"></i>
+							</span> <span class="text">削除</span>
+						</a></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	</main>
+</body>
+</html>
