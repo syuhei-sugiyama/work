@@ -13,7 +13,10 @@ public class YoyakuRirekiForm {
 	private String date;
 
 	@NotEmpty
-	private String time;
+	private String startTime;
+
+	@NotEmpty
+	private String endTime;
 
 	@NotEmpty
 	private String customer;

@@ -40,12 +40,18 @@
 						<div class="mb-3">
 							<label for="date" class="form-label"> <span
 								class="badge bg-danger">必須</span> 予約日時
-							</label> <input class="form-control" type="date"
-								th:errorclass="is-invalid" th:field="*{date}">
+							</label>
+						</div>
+						<div class="mb-3">
+							<input type="date" th:errorclass="is-invalid" th:field="*{date}">
 							<div class="invalid-feedback" th:errors="*{date}"></div>
-							<input class="form-control" type="time"
-								th:errorclass="is-invalid" th:field="*{time}">
-							<div class="invalid-feedback" th:errors="*{time}"></div>
+							<div>
+								<input type="time" th:errorclass="is-invalid" th:field="*{startTime}">
+								<div class="invalid-feedback" th:errors="*{startTime}"></div>
+								～
+								<input type="time" th:errorclass="is-invalid" th:field="*{endTime}">
+								<div class="invalid-feedback" th:errors="*{endTime}"></div>
+							</div>
 						</div>
 
 						<div class="mb-3">

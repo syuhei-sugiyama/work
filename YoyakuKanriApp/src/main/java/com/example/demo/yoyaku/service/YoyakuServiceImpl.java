@@ -57,7 +57,7 @@ public class YoyakuServiceImpl implements YoyakuService {
 		// 予約日時の設定
 		Calendar yoyakuDate = Calendar.getInstance();
 		List<Integer> dateList = convertStrToIntArr(yoyakuRirekiForm.getDate(), YoyakuRirekiConst.DATE_SEPARATER);
-		List<Integer> timeList = convertStrToIntArr(yoyakuRirekiForm.getTime(), YoyakuRirekiConst.TIME_SEPARATER);
+		List<Integer> timeList = convertStrToIntArr(yoyakuRirekiForm.getStartTime(), YoyakuRirekiConst.TIME_SEPARATER);
 		// 年、月、日、時、分、秒
 		yoyakuDate.set(dateList.get(0), dateList.get(1)-1, dateList.get(2), timeList.get(0), timeList.get(1), 0);
 		yoyakuRegisterInfo.setYoyakuDate(yoyakuDate.getTime());

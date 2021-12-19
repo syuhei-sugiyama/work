@@ -29,7 +29,7 @@ public class YoyakuController {
 		// 画面で選択された年月日時分を、年月日と時分に区切る(例「2021-11-23 1500」→「2021-11-23」「1500」)
 		String[] dateTimeArr = dateTime.split(" ");
 		yoyakuRirekiForm.setDate(dateTimeArr[0]);
-		yoyakuRirekiForm.setTime(dateTimeArr[1]);
+		yoyakuRirekiForm.setStartTime(dateTimeArr[1]);
 		model.addAttribute("yoyakuInfo", yoyakuServiceImpl.init(yoyakuRirekiForm));
 		return "yoyaku/add";
 	}
