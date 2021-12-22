@@ -57,15 +57,15 @@ public class YoyakuServiceImpl implements YoyakuService {
 		// 予約日時の設定
 		Calendar yoyakuDate = Calendar.getInstance();
 		List<Integer> dateList = convertStrToIntArr(yoyakuRirekiForm.getDate(), YoyakuRirekiConst.DATE_SEPARATER);
-		List<Integer> timeList = convertStrToIntArr(yoyakuRirekiForm.getStartTime(), YoyakuRirekiConst.TIME_SEPARATER);
+		List<Integer> startTimeList = convertStrToIntArr(yoyakuRirekiForm.getStartTime(), YoyakuRirekiConst.TIME_SEPARATER);
+		List<Integer> endTimeList = convertStrToIntArr(yoyakuRirekiForm.getEndTime(), YoyakuRirekiConst.TIME_SEPARATER);
 		// 年、月、日、時、分、秒
-		yoyakuDate.set(dateList.get(0), dateList.get(1)-1, dateList.get(2), timeList.get(0), timeList.get(1), 0);
+		yoyakuDate.set(dateList.get(0), dateList.get(1)-1, dateList.get(2), startTimeList.get(0), startTimeList.get(1), 0);
+		// 開始時間のセット
 		yoyakuRegisterInfo.setYoyakuDate(yoyakuDate.getTime());
-		// 終了時間の計算及び設定
-		// 開始の時と分、メニューIDの配列を使って、終了時間を計算する。
-		int[] endTimeArr = calcEndTime(timeList.get(0), timeList.get(1), yoyakuRirekiForm.getSelectMenuId());
-		yoyakuDate.set(Calendar.HOUR_OF_DAY, endTimeArr[0]);
-		yoyakuDate.set(Calendar.MINUTE, endTimeArr[1]);
+		// 終了時間のセット
+		yoyakuDate.set(Calendar.HOUR_OF_DAY, endTimeList.get(0));
+		yoyakuDate.set(Calendar.MINUTE, endTimeList.get(1));
 		yoyakuRegisterInfo.setEndDate(yoyakuDate.getTime());
 		// メニューIDの設定
 		yoyakuRegisterInfo
@@ -116,35 +116,6 @@ public class YoyakuServiceImpl implements YoyakuService {
 	}
 
 	/**
-	 *
-	 * @param startHour 開始時刻の時
-	 * @param startMinute  開始時刻の分
-	 * @param menuIdArr 画面で選択されたメニューのID配列
-	 * @return 終了時刻([0]→時、[1]→分)
-	 */
-	private int[] calcEndTime(int startHour, int startMinute, String[] menuIdArr) {
-		int endHour = startHour;
-		int endMinute = 0;
-		// メニューの所要時間の合計を算出
-		int totalRequiredTimeMinute = 0;
-		for (String menuId : menuIdArr) {
-			totalRequiredTimeMinute += menuServiceImpl.findByMenuId(menuId).getRequiredTime();
-		}
-		totalRequiredTimeMinute += startMinute;
-		// 所要時間の分→時変換判定
-		if (totalRequiredTimeMinute >= 60) {
-			// 時を加算
-			endHour += totalRequiredTimeMinute / 60;
-			// 分を再設定
-			endMinute = totalRequiredTimeMinute % 60;
-		}else {
-			endMinute = totalRequiredTimeMinute;
-		}
-		int endTimeArr[] = {endHour, endMinute};
-		return endTimeArr;
-	}
-
-	/**
 	 * [機能] 全ての予約情報をjson形式のStringでfullCalendarの画面に返す
 	 * @return 全ての予約情報のjson形式文字列
 	 */
@@ -186,8 +157,12 @@ public class YoyakuServiceImpl implements YoyakuService {
 		yoyakuRirekiForm.setSelectHairdresserId(yoyakuInfo.getBiyoshiId());
 		yoyakuRirekiForm.setSelectMenuId(yoyakuInfo.getMenus().split(YoyakuRirekiConst.MENU_ID_SEPARATER));
 		yoyakuRirekiForm.setCustomer(yoyakuInfo.getCustomer());
-		/*yoyakuInfo.getYoyakuDate();
-		yoyakuRirekiForm.setDate(yoyakuInfo.getYoyakuDate().toString());*/
+		Calendar yoyakuDate = Calendar.getInstance();
+		yoyakuDate.setTime(yoyakuInfo.getYoyakuDate());
+		yoyakuRirekiForm.setDate(new SimpleDateFormat("YYYY-MM-dd").format(yoyakuDate.getTime()));
+		yoyakuRirekiForm.setStartTime(new SimpleDateFormat("HH:mm").format(yoyakuDate.getTime()));
+		yoyakuDate.setTime(yoyakuInfo.getEndDate());
+		yoyakuRirekiForm.setEndTime(new SimpleDateFormat("HH:mm").format(yoyakuDate.getTime()));
 	}
 
 }
