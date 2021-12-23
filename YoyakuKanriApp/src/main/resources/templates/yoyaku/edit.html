@@ -24,7 +24,7 @@
 			<div class="card shadow" style="max-width: 480px;">
 				<div class="card-body">
 					<h3 class="card-title mb-3 text-center text-navy">予約更新</h3>
-					<form th:action="@{/yoyaku/register}" th:object="${yoyakuInfo}"
+					<form th:action="@{/yoyaku/update}" th:object="${yoyakuInfo}"
 						method="post" novalidate>
 
 						<div class="mb-3">
@@ -65,16 +65,9 @@
 						</div>
 
 						<div class="mb-3">
-							メニュー <label class="ms-2 form-check" th:each="menu : *{menus}" th:object="${selectMenus}">
+							メニュー <label class="ms-2 form-check" th:each="menu : *{menus}">
 								<input type="checkbox" th:value="${menu.key}"
-								th:text="${menu.value}" th:field="*{selectMenus}">
-								<!--
-								上記のように、メニュー表示用のオブジェクト(menus)とは別で、
-								画面から選択した値を格納もしくは、DBから取得した値を格納した別のオブジェクト(selectMenus)を
-								th:objectとth:fieldでバインドして、
-								バインドされたオブジェクトに格納されてる値と、th:valueに設定された値が同じなら
-								checked="checked"が付与される。
-								-->
+								th:text="${menu.value}" th:field="${yoyakuInfo.selectMenuId}">
 							</label>
 						</div>
 

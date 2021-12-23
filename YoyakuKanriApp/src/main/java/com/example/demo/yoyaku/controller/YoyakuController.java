@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.demo.yoyaku.model.SelectMenus;
 import com.example.demo.yoyaku.model.YoyakuRirekiForm;
 import com.example.demo.yoyaku.service.YoyakuServiceImpl;
 
@@ -47,14 +46,12 @@ public class YoyakuController {
 	}
 
 	@GetMapping("/edit/{yoyakuId}")
-	public String editYoyaku(Model model, @PathVariable String yoyakuId, SelectMenus selectMenus) {
+	public String editYoyaku(Model model, @PathVariable String yoyakuId) {
 		// 画面に表示する項目の値取得する
 		// カレンダーで選択された予約情報を取得して、編集画面で表示する
 		YoyakuRirekiForm yoyakuRirekiForm = new YoyakuRirekiForm();
 		yoyakuServiceImpl.getYoyakuById(yoyakuRirekiForm, yoyakuId);
 		model.addAttribute("yoyakuInfo", yoyakuServiceImpl.init(yoyakuRirekiForm));
-		selectMenus.setSelectMenus(yoyakuRirekiForm.getSelectMenuId());
-		model.addAttribute("selectMenus", selectMenus);
 		return "yoyaku/edit";
 	}
 }
