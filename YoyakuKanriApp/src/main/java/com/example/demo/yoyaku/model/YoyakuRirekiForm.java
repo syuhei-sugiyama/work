@@ -41,4 +41,9 @@ public class YoyakuRirekiForm {
 	 * (checkboxの為、複数選択された時用にString配列で受け取る)
 	 */
 	private String[] selectMenuId;
+
+	/**
+	 * 更新・削除用に予約履歴IDの保持
+	 */
+	private String yoyakuRirekiId;
 }

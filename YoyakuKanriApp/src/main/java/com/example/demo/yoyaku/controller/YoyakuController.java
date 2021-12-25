@@ -54,4 +54,15 @@ public class YoyakuController {
 		model.addAttribute("yoyakuInfo", yoyakuServiceImpl.init(yoyakuRirekiForm));
 		return "yoyaku/edit";
 	}
+
+	@PostMapping("/update")
+	public String updateYoyaku(@Validated @ModelAttribute("yoyakuInfo") YoyakuRirekiForm yoyakuRirekiForm, Model model,
+			BindingResult result, Authentication loginUser) {
+		if (result.hasErrors()) {
+			return "yoyaku/edit";
+		}
+		// 更新処理
+		yoyakuServiceImpl.update(yoyakuRirekiForm, loginUser.getName());
+		return "redirect:/";
+	}
 }

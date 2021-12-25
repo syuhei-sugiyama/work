@@ -47,29 +47,11 @@ public class YoyakuServiceImpl implements YoyakuService {
 	@Override
 	public void register(YoyakuRirekiForm yoyakuRirekiForm, String loginUserName) {
 		YoyakuRireki yoyakuRegisterInfo = new YoyakuRireki();
+		// 画面から選択された値を設定する
+		setYoyakuInfoFromScreen(yoyakuRegisterInfo, yoyakuRirekiForm);
 		// 予約履歴IDの生成
 		yoyakuRegisterInfo
 				.setYoyakuRirekiId(saibanServiceImpl.createId(YoyakuRirekiConst.YOYAKURIREKI_ID, loginUserName));
-		// 美容師IDのセット
-		yoyakuRegisterInfo.setBiyoshiId(yoyakuRirekiForm.getSelectHairdresserId());
-		// お客様名のセット
-		yoyakuRegisterInfo.setCustomer(yoyakuRirekiForm.getCustomer());
-		// 予約日時の設定
-		Calendar yoyakuDate = Calendar.getInstance();
-		List<Integer> dateList = convertStrToIntArr(yoyakuRirekiForm.getDate(), YoyakuRirekiConst.DATE_SEPARATER);
-		List<Integer> startTimeList = convertStrToIntArr(yoyakuRirekiForm.getStartTime(), YoyakuRirekiConst.TIME_SEPARATER);
-		List<Integer> endTimeList = convertStrToIntArr(yoyakuRirekiForm.getEndTime(), YoyakuRirekiConst.TIME_SEPARATER);
-		// 年、月、日、時、分、秒
-		yoyakuDate.set(dateList.get(0), dateList.get(1)-1, dateList.get(2), startTimeList.get(0), startTimeList.get(1), 0);
-		// 開始時間のセット
-		yoyakuRegisterInfo.setYoyakuDate(yoyakuDate.getTime());
-		// 終了時間のセット
-		yoyakuDate.set(Calendar.HOUR_OF_DAY, endTimeList.get(0));
-		yoyakuDate.set(Calendar.MINUTE, endTimeList.get(1));
-		yoyakuRegisterInfo.setEndDate(yoyakuDate.getTime());
-		// メニューIDの設定
-		yoyakuRegisterInfo
-				.setMenus(convertStrArrToStr(yoyakuRirekiForm.getSelectMenuId(), YoyakuRirekiConst.MENU_ID_SEPARATER));
 		// 共通カラムの設定
 		UtilColumn utilColumnVal = utilColumnServiceImpl.createUtilColumnValue(loginUserName);
 		yoyakuRegisterInfo.setCreateBy(utilColumnVal.getCreateBy());
@@ -163,6 +145,53 @@ public class YoyakuServiceImpl implements YoyakuService {
 		yoyakuRirekiForm.setStartTime(new SimpleDateFormat("HH:mm").format(yoyakuDate.getTime()));
 		yoyakuDate.setTime(yoyakuInfo.getEndDate());
 		yoyakuRirekiForm.setEndTime(new SimpleDateFormat("HH:mm").format(yoyakuDate.getTime()));
+		yoyakuRirekiForm.setYoyakuRirekiId(yoyakuInfo.getYoyakuRirekiId());
+	}
+
+	@Override
+	public void update(YoyakuRirekiForm yoyakuRirekiForm, String loginUserName) {
+		// 登録済み情報の取得
+		YoyakuRireki yoyakuInfo = yoyakuRirekiRepository.findByYoyakuRirekiId(yoyakuRirekiForm.getYoyakuRirekiId());
+		// 画面にて選択された値を設定する
+		setYoyakuInfoFromScreen(yoyakuInfo, yoyakuRirekiForm);
+		// 共通カラムの設定
+		UtilColumn utilColumnVal = utilColumnServiceImpl.createUtilColumnValue(loginUserName);
+		yoyakuInfo.setUpdateBy(utilColumnVal.getUpdateBy());
+		yoyakuInfo.setUpdateTime(utilColumnVal.getUpdateTime());
+		// 予約履歴テーブルを更新
+		yoyakuRirekiRepository.save(yoyakuInfo);
+	}
+
+	/**
+	 * [機能] 画面にて選択された値を予約履歴モデルにセットする
+	 * @param yoyakuInfo 値をセットする予約履歴モデル
+	 * @param yoyakuRirekiForm 画面にて選択された値を保持してるフォーム
+	 */
+	private void setYoyakuInfoFromScreen(YoyakuRireki yoyakuInfo, YoyakuRirekiForm yoyakuRirekiForm) {
+		// 美容師IDのセット
+		yoyakuInfo.setBiyoshiId(yoyakuRirekiForm.getSelectHairdresserId());
+		// お客様名のセット
+		yoyakuInfo.setCustomer(yoyakuRirekiForm.getCustomer());
+		// 予約日時の設定
+		Calendar yoyakuDate = Calendar.getInstance();
+		List<Integer> dateList = convertStrToIntArr(yoyakuRirekiForm.getDate(), YoyakuRirekiConst.DATE_SEPARATER);
+		List<Integer> startTimeList = convertStrToIntArr(yoyakuRirekiForm.getStartTime(),
+				YoyakuRirekiConst.TIME_SEPARATER);
+		List<Integer> endTimeList = convertStrToIntArr(yoyakuRirekiForm.getEndTime(), YoyakuRirekiConst.TIME_SEPARATER);
+		// 年、月、日、時、分、秒
+		yoyakuDate.set(dateList.get(0), dateList.get(1) - 1, dateList.get(2), startTimeList.get(0),
+				startTimeList.get(1), 0);
+		// 開始時間のセット
+		yoyakuInfo.setYoyakuDate(yoyakuDate.getTime());
+		// 終了時間のセット
+		yoyakuDate.set(Calendar.HOUR_OF_DAY, endTimeList.get(0));
+		yoyakuDate.set(Calendar.MINUTE, endTimeList.get(1));
+		yoyakuInfo.setEndDate(yoyakuDate.getTime());
+		// メニューIDの設定
+		yoyakuInfo
+				.setMenus(convertStrArrToStr(yoyakuRirekiForm.getSelectMenuId(), YoyakuRirekiConst.MENU_ID_SEPARATER));
+		// 予約履歴IDのセット(更新用)
+		yoyakuInfo.setYoyakuRirekiId(yoyakuRirekiForm.getYoyakuRirekiId());
 	}
 
 }

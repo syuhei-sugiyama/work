@@ -12,4 +12,6 @@ public interface YoyakuService {
 
 	void getYoyakuById(YoyakuRirekiForm yoyakuRirekiForm, String yoyakuRirekiId);
 
+	void update(YoyakuRirekiForm yoyakuRirekiForm, String loginUserName);
+
 }
