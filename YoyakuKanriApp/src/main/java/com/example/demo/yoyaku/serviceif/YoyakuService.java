@@ -14,4 +14,6 @@ public interface YoyakuService {
 
 	void update(YoyakuRirekiForm yoyakuRirekiForm, String loginUserName);
 
+	void delete(String yoyakuRirekiId);
+
 }

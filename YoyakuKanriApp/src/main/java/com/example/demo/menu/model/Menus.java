@@ -27,7 +27,7 @@ public class Menus {
 	@NotEmpty(groups = {UpdateGroup.class})
 	private String menuId;
 
-	@Size(max = 30, min = 5)
+	@Size(max = 30)
 	@NotEmpty(groups = {SearchGroup.class, AddGroup.class}, message = "メニュー名を入力してください")
 	private String menuName;
 

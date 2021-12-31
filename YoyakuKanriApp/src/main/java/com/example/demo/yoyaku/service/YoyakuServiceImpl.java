@@ -194,4 +194,9 @@ public class YoyakuServiceImpl implements YoyakuService {
 		yoyakuInfo.setYoyakuRirekiId(yoyakuRirekiForm.getYoyakuRirekiId());
 	}
 
+	@Override
+	public void delete(String yoyakuRirekiId) {
+		yoyakuRirekiRepository.deleteById(yoyakuRirekiId);
+	}
+
 }

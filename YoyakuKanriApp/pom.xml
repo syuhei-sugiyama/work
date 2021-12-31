@@ -117,6 +117,11 @@
 			<artifactId>moment</artifactId>
 			<version>2.29.1</version>
 		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>jquery-ui</artifactId>
+			<version>1.13.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>

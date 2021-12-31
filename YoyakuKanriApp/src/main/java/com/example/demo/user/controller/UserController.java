@@ -53,8 +53,12 @@ public class UserController {
 			return "user/register";
 		}
 		// 登録処理
-		userServiceImpl.addUser(user, loginUser.getName());
-
+		// 初回登録とそれ以外で引数のログインユーザ名を使い分け
+		if (loginUser != null) {
+			userServiceImpl.addUser(user, loginUser.getName());
+		} else {
+			userServiceImpl.addUser(user, "SYSTEM");
+		}
 		return "redirect:/user/index";
 	}
 

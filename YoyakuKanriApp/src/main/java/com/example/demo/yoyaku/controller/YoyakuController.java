@@ -65,4 +65,14 @@ public class YoyakuController {
 		yoyakuServiceImpl.update(yoyakuRirekiForm, loginUser.getName());
 		return "redirect:/";
 	}
+
+	@GetMapping("/delete/{yoyakuId}")
+	public String deleteYoyaku(@PathVariable String yoyakuId) {
+		if (yoyakuId == null || yoyakuId.isBlank()) {
+			return "yoyaku/edit";
+		}
+		// 削除処理
+		yoyakuServiceImpl.delete(yoyakuId);
+		return "redirect:/";
+	}
 }
