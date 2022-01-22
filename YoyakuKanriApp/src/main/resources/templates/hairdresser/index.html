@@ -19,8 +19,6 @@
 		<!-- トグルボタン -->
 		<div th:replace="~{fragments/sidebar :: toggler}"></div>
 		<h6 class="text-navy my-2">美容師検索</h6>
-		<div th:text="${userid}"></div>
-		<p></p>
 		<div class="d-grid gap-2 d-md-flex justify-content-md-end">
 			<form th:action="@{/hairdresser/register}" method="get">
 				<button type="submit" class="btn btn-primary me-md-2">新規登録</button>
