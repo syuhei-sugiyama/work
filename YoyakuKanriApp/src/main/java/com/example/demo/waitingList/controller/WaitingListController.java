@@ -47,4 +47,34 @@ public class WaitingListController {
 		waitingListServiceImpl.register(waitingListForm, loginUser.getName());
 		return "redirect:/waitingList/index";
 	}
+
+	@GetMapping("/edit/{waitingListHistoryId}")
+	public String editWaitingList(Model model, @PathVariable String waitingListHistoryId) {
+		// カレンダーで選択されたキャンセル待ち情報を取得して、編集画面に表示する
+		WaitingListForm waitingListForm = new WaitingListForm();
+		waitingListServiceImpl.setWaitingListInfoToForm(waitingListForm, waitingListHistoryId);
+		model.addAttribute("waitingListInfo", waitingListServiceImpl.prepareItemOfRegisterScreen(waitingListForm));
+		return "waitingList/edit";
+	}
+
+	@PostMapping("/update")
+	public String updateWaitingList(@Validated @ModelAttribute("waitingListInfo") WaitingListForm waitingListForm,
+			BindingResult result, Authentication loginUser) {
+		if (result.hasErrors()) {
+			return "waitingList/edit";
+		}
+		// 更新処理
+		waitingListServiceImpl.updateWaitingList(waitingListForm, loginUser.getName());
+		return "redirect:/waitingList/index";
+	}
+
+	@GetMapping("/delete/{waitingListHistoryId}")
+	public String deleteWaitingList(@PathVariable String waitingListHistoryId) {
+		if (waitingListHistoryId == null || waitingListHistoryId.isBlank()) {
+			return "waitingList/edit";
+		}
+		// 削除処理
+		waitingListServiceImpl.deleteWaitingList(waitingListHistoryId);
+		return "redirect:/waitingList/index";
+	}
 }

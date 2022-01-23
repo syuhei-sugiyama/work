@@ -27,45 +27,48 @@
 			</form>
 		</div>
 		<hr>
-		<form th:action="@{/menu/search}" th:object="${formMenu}" method="post"
-			novalidate>
+		<form th:action="@{/menu/search}" th:object="${formMenu}"
+			method="post" novalidate>
 			<div class="mb-3">
-				<label>メニュー名：</label> <input type="text" th:field="*{menuName}" th:errorclass="is-invalid">
+				<label>メニュー名：</label> <input type="text" th:field="*{menuName}"
+					th:errorclass="is-invalid">
 				<div class="invalid-feedback" th:errors="*{menuName}"></div>
 			</div>
 			<p></p>
 			<button class="btn btn-navy" type="submit">検索</button>
 		</form>
 		<hr>
-		<div th:if="${menus.size() == 0}">該当データがありません</div>
-		<table class="table table-bordered" th:if="${menus.size() > 0}">
-			<thead>
-				<tr>
-					<th>#</th>
-					<th>メニュー名</th>
-					<th>金額</th>
-					<th>所要時間（分）</th>
-					<th></th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="menu : ${menus}" th:object="${menu}">
-					<td th:text="*{menuId}"></td>
-					<td th:text="*{menuName}"></td>
-					<td th:text="*{price}"></td>
-					<td th:text="*{requiredTime}"></td>
-					<td><a th:href="@{/menu/edit/{id}(id=*{menuId})}"
-						class="btn btn-primary btn-icon-split"> <span
-							class="icon text-white-50"> <i class="fas fa-trash"></i>
-						</span> <span class="text">編集</span>
-					</a> <a th:href="@{/menu/delete/{id}(id=*{menuId})}"
-						class="btn btn-danger btn-icon-split"> <span
-							class="icon text-white-50"> <i class="fas fa-trash"></i>
-						</span> <span class="text">削除</span>
-					</a></td>
-				</tr>
-			</tbody>
-		</table>
+		<div th:if="${menus}">
+			<div th:if="${menus.size() == 0}">該当データがありません</div>
+			<table class="table table-bordered" th:if="${menus.size() > 0}">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>メニュー名</th>
+						<th>金額</th>
+						<th>所要時間（分）</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="menu : ${menus}" th:object="${menu}">
+						<td th:text="*{menuId}"></td>
+						<td th:text="*{menuName}"></td>
+						<td th:text="*{price}"></td>
+						<td th:text="*{requiredTime}"></td>
+						<td><a th:href="@{/menu/edit/{id}(id=*{menuId})}"
+							class="btn btn-primary btn-icon-split"> <span
+								class="icon text-white-50"> <i class="fas fa-trash"></i>
+							</span> <span class="text">編集</span>
+						</a> <a th:href="@{/menu/delete/{id}(id=*{menuId})}"
+							class="btn btn-danger btn-icon-split"> <span
+								class="icon text-white-50"> <i class="fas fa-trash"></i>
+							</span> <span class="text">削除</span>
+						</a></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
 	</main>
 </body>

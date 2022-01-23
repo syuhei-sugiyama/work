@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.demo.menu.model.Menus;
 import com.example.demo.menu.model.Menus.AddGroup;
-import com.example.demo.menu.model.Menus.SearchGroup;
 import com.example.demo.menu.model.Menus.UpdateGroup;
 import com.example.demo.menu.repository.MenusRepository;
 import com.example.demo.menu.service.MenuServiceImpl;
@@ -43,8 +42,6 @@ public class MenuController {
 
 	@GetMapping("/index")
 	public String index(@ModelAttribute("formMenu") Menus formMenu, Model model) {
-		model.addAttribute("formMenu", formMenu);
-		model.addAttribute("menus", menusRepository.findAll());
 		return "menu/index";
 	}
 
@@ -91,12 +88,18 @@ public class MenuController {
 	}
 
 	@PostMapping("/search")
-	public String search(@Validated(SearchGroup.class) @ModelAttribute("formMenu") Menus formMenu, BindingResult result, Model model) {
+	public String search(@Validated @ModelAttribute("formMenu") Menus formMenu, BindingResult result, Model model) {
+		model.addAttribute("formMenu", formMenu);
 		if (result.hasErrors()) {
-			model.addAttribute("menus", menusRepository.findAll());
 			return "menu/index";
 		}
-		model.addAttribute("menus", menusRepository.findByMenuName(formMenu.getMenuName()));
+		// 全検索かどうか
+		if (formMenu.getMenuName() != null &&
+				!formMenu.getMenuName().isEmpty()) {
+			model.addAttribute("menus", menusRepository.findByMenuName(formMenu.getMenuName()));
+		} else {
+			model.addAttribute("menus", menusRepository.findAll());
+		}
 		return "menu/index";
 	}
 

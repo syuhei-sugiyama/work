@@ -138,4 +138,48 @@ public class WaitingListServiceImpl implements WaitingListService {
 		registerEntity.setWaitingListHistoryId(waitingListForm.getWaitingListHistoryId());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void setWaitingListInfoToForm(WaitingListForm waitingListForm, String waitingListHistoryId) {
+		WaitingListHistory waitingListInfo = waitingListHistoryRepository.findByWaitingListHistoryId(waitingListHistoryId);
+		waitingListForm.setSelectHairdresserId(waitingListInfo.getBiyoshiId());
+		waitingListForm.setSelectMenuId(waitingListInfo.getMenus().split(UtilServiceConst.MENU_ID_SEPARATER));
+		waitingListForm.setCustomer(waitingListInfo.getCustomer());
+		Calendar yoyakuDate = Calendar.getInstance();
+		yoyakuDate.setTime(waitingListInfo.getStartDate());
+		waitingListForm.setDate(new SimpleDateFormat("YYYY-MM-dd").format(yoyakuDate.getTime()));
+		waitingListForm.setStartTime(new SimpleDateFormat("HH:mm").format(yoyakuDate.getTime()));
+		yoyakuDate.setTime(waitingListInfo.getEndDate());
+		waitingListForm.setEndTime(new SimpleDateFormat("HH:mm").format(yoyakuDate.getTime()));
+		waitingListForm.setWaitingListHistoryId(waitingListInfo.getWaitingListHistoryId());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void updateWaitingList(WaitingListForm waitingListForm, String loginUserName) {
+		// 登録済み情報の取得
+		WaitingListHistory waitingListInfo = waitingListHistoryRepository
+				.findByWaitingListHistoryId(waitingListForm.getWaitingListHistoryId());
+		// 画面にて入力された値を設定する
+		setWaitingListInfoFromScreen(waitingListInfo, waitingListForm);
+		// 共通カラムの設定
+		UtilColumn utilColumnVal = utilColumnServiceImpl.createUtilColumnValue(loginUserName);
+		waitingListInfo.setUpdateBy(utilColumnVal.getUpdateBy());
+		waitingListInfo.setUpdateTime(utilColumnVal.getUpdateTime());
+		// キャンセル待ち履歴テーブルを更新
+		waitingListHistoryRepository.save(waitingListInfo);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void deleteWaitingList(String waitingListHistoryId) {
+		waitingListHistoryRepository.deleteById(waitingListHistoryId);
+	}
+
 }

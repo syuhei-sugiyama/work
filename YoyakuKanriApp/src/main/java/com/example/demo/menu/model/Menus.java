@@ -28,7 +28,7 @@ public class Menus {
 	private String menuId;
 
 	@Size(max = 30)
-	@NotEmpty(groups = {SearchGroup.class, AddGroup.class}, message = "メニュー名を入力してください")
+	@NotEmpty(groups = {AddGroup.class, UpdateGroup.class}, message = "メニュー名を入力してください")
 	private String menuName;
 
 	@Range(min = 0, max = 20000, groups = {AddGroup.class, UpdateGroup.class}, message = "金額は0～20000で入力してください")
