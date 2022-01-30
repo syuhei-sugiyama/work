@@ -1,5 +1,6 @@
 package com.example.demo.yoyaku.controller;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.demo.waitingList.model.WaitingListForm;
+import com.example.demo.waitingList.model.WaitingListForm.ConvertToYoyakuGroup;
 import com.example.demo.yoyaku.model.YoyakuRirekiForm;
 import com.example.demo.yoyaku.service.YoyakuServiceImpl;
 
@@ -24,7 +27,8 @@ public class YoyakuController {
 	private final YoyakuServiceImpl yoyakuServiceImpl;
 
 	@GetMapping("/add/{dateTime}")
-	public String addYoyaku(@ModelAttribute("yoyakuInfo") YoyakuRirekiForm yoyakuRirekiForm, Model model, @PathVariable String dateTime) {
+	public String addYoyaku(@ModelAttribute("yoyakuInfo") YoyakuRirekiForm yoyakuRirekiForm, Model model,
+			@PathVariable String dateTime) {
 		// 画面で選択された年月日時分を、年月日と時分に区切る(例「2021-11-23 1500」→「2021-11-23」「1500」)
 		String[] dateTimeArr = dateTime.split(" ");
 		yoyakuRirekiForm.setDate(dateTimeArr[0]);
@@ -74,5 +78,26 @@ public class YoyakuController {
 		// 削除処理
 		yoyakuServiceImpl.delete(yoyakuId);
 		return "redirect:/";
+	}
+
+	/**
+	 * 【機能】キャンセル待ち情報を使って予約登録画面を表示する
+	 * @param waitingListForm キャンセル待ち情報が格納されたフォーム
+	 * @param model モデル
+	 * @param result フォームバリデーションチェック結果
+	 * @return 予約登録画面
+	 */
+	@PostMapping("/convertToYoyaku")
+	public String convertWListToYoyaku(
+			@Validated(ConvertToYoyakuGroup.class) @ModelAttribute("waitingListInfo") WaitingListForm waitingListForm,
+			Model model,
+			BindingResult result) {
+		if (result.hasErrors()) {
+			return "yoyaku/edit";
+		}
+		YoyakuRirekiForm yoyakuRirekiForm = new YoyakuRirekiForm();
+		BeanUtils.copyProperties(waitingListForm, yoyakuRirekiForm);
+		model.addAttribute("yoyakuInfo", yoyakuServiceImpl.init(yoyakuRirekiForm));
+		return "yoyaku/add";
 	}
 }

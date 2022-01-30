@@ -6,16 +6,6 @@
 <meta charset="UTF-8" th:remove="tag">
 <script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
 <title>予約登録画面</title>
-<script>
-/* ページ読み込み時に、チェックボックスのチェックを全て外す
- * input type="checkbox"に対して、th:fieldを使用した際の弊害を解消する為
- */
-	$(document).ready(
-			function() {
-				$('input[type="checkbox"]').removeAttr('checked').prop(
-						'checked', false).change();
-			});
-</script>
 </head>
 <body>
 

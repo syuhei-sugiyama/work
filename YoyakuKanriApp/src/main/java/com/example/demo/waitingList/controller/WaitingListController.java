@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.demo.waitingList.model.WaitingListForm;
+import com.example.demo.waitingList.model.WaitingListForm.UpdateGroup;
 import com.example.demo.waitingList.service.WaitingListServiceImpl;
 
 import lombok.RequiredArgsConstructor;
@@ -58,7 +59,7 @@ public class WaitingListController {
 	}
 
 	@PostMapping("/update")
-	public String updateWaitingList(@Validated @ModelAttribute("waitingListInfo") WaitingListForm waitingListForm,
+	public String updateWaitingList(@Validated(UpdateGroup.class) @ModelAttribute("waitingListInfo") WaitingListForm waitingListForm,
 			BindingResult result, Authentication loginUser) {
 		if (result.hasErrors()) {
 			return "waitingList/edit";
