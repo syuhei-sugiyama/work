@@ -50,6 +50,13 @@ public class YoyakuServiceImpl implements YoyakuService {
 
 	@Override
 	public void register(YoyakuRirekiForm yoyakuRirekiForm, String loginUserName) {
+		/*
+		 * ・メソッドの戻り値を変更する
+		 * ・予約履歴フォームにキャンセル待ちIDの値が設定されていたら、ヒットするキャンセル待ちの削除
+		 * ・共通カラム自体を親Entityクラス作って、各エンティティはそれを継承するようにする。
+		 * 　それと、登録、更新時の登録日時、更新日時の自動設定もアノテーションとかで出来るっぽい。
+		 *
+		 */
 		YoyakuRireki yoyakuRegisterInfo = new YoyakuRireki();
 		// 画面から選択された値を設定する
 		setYoyakuInfoFromScreen(yoyakuRegisterInfo, yoyakuRirekiForm);
@@ -57,11 +64,11 @@ public class YoyakuServiceImpl implements YoyakuService {
 		yoyakuRegisterInfo
 				.setYoyakuRirekiId(saibanServiceImpl.createId(YoyakuRirekiConst.YOYAKURIREKI_ID, loginUserName));
 		// 共通カラムの設定
-		UtilColumn utilColumnVal = utilColumnServiceImpl.createUtilColumnValue(loginUserName);
+		/*UtilColumn utilColumnVal = utilColumnServiceImpl.createUtilColumnValue(loginUserName);
 		yoyakuRegisterInfo.setCreateBy(utilColumnVal.getCreateBy());
 		yoyakuRegisterInfo.setUpdateBy(utilColumnVal.getUpdateBy());
 		yoyakuRegisterInfo.setCreateTime(utilColumnVal.getCreateTime());
-		yoyakuRegisterInfo.setUpdateTime(utilColumnVal.getUpdateTime());
+		yoyakuRegisterInfo.setUpdateTime(utilColumnVal.getUpdateTime());*/
 		// 予約履歴テーブルへ登録
 		yoyakuRirekiRepository.save(yoyakuRegisterInfo);
 	}

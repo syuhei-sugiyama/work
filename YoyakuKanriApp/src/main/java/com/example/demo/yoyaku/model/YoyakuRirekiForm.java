@@ -46,4 +46,9 @@ public class YoyakuRirekiForm {
 	 * 更新・削除用に予約履歴IDの保持
 	 */
 	private String yoyakuRirekiId;
+
+	/**
+	 * キャンセル待ち→予約へ移動した時の為にキャンセル待ち履歴IDを保持
+	 */
+	private String waitingListHistoryId;
 }

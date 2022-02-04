@@ -61,4 +61,9 @@ public class WaitingListForm {
 	 */
 	@NotEmpty(groups = { UpdateGroup.class, DeleteGroup.class, ConvertToYoyakuGroup.class })
 	private String waitingListHistoryId;
+
+	/**
+	 * 予約→キャンセル待ちへ移動した時の為に予約履歴IDを保持
+	 */
+	private String yoyakuRirekiId;
 }

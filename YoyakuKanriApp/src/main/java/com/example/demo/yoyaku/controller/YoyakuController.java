@@ -93,7 +93,7 @@ public class YoyakuController {
 			Model model,
 			BindingResult result) {
 		if (result.hasErrors()) {
-			return "yoyaku/edit";
+			return "waitingList/edit";
 		}
 		YoyakuRirekiForm yoyakuRirekiForm = new YoyakuRirekiForm();
 		BeanUtils.copyProperties(waitingListForm, yoyakuRirekiForm);

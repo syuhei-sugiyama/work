@@ -4,13 +4,16 @@ import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.validation.constraints.Size;
 
-import lombok.Data;
+import com.example.demo.util.entity.BaseEntity;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
-@Data
-public class YoyakuRireki {
+@Getter
+@Setter
+public class YoyakuRireki extends BaseEntity {
 
 	@Id
 	private String yoyakuRirekiId;
@@ -24,14 +27,4 @@ public class YoyakuRireki {
 	private Date endDate;
 
 	private String menus;
-
-	@Size(max = 6)
-	private String createBy;
-
-	private Date createTime;
-
-	@Size(max = 6)
-	private String updateBy;
-
-	private Date updateTime;
 }
