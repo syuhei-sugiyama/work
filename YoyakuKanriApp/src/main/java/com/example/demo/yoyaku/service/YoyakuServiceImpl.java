@@ -6,14 +6,14 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.hairdresser.service.HairdresserServiceImpl;
 import com.example.demo.menu.service.MenuServiceImpl;
 import com.example.demo.util.constant.UtilServiceConst;
-import com.example.demo.util.model.UtilColumn;
 import com.example.demo.util.service.SaibanServiceImpl;
-import com.example.demo.util.service.UtilColumnServiceImpl;
 import com.example.demo.util.service.UtilServiceImpl;
+import com.example.demo.waitingList.repository.WaitingListHistoryRepository;
 import com.example.demo.yoyaku.YoyakuRirekiConst;
 import com.example.demo.yoyaku.model.YoyakuInfo;
 import com.example.demo.yoyaku.model.YoyakuRireki;
@@ -35,11 +35,11 @@ public class YoyakuServiceImpl implements YoyakuService {
 
 	private final SaibanServiceImpl saibanServiceImpl;
 
-	private final UtilColumnServiceImpl utilColumnServiceImpl;
-
 	private final YoyakuRirekiRepository yoyakuRirekiRepository;
 
 	private final UtilServiceImpl utilServiceImpl;
+
+	private final WaitingListHistoryRepository waitingListHistoryRepository;
 
 	@Override
 	public YoyakuRirekiForm init(YoyakuRirekiForm yoyakuRirekiForm) {
@@ -48,29 +48,22 @@ public class YoyakuServiceImpl implements YoyakuService {
 		return yoyakuRirekiForm;
 	}
 
+	@Transactional
 	@Override
-	public void register(YoyakuRirekiForm yoyakuRirekiForm, String loginUserName) {
-		/*
-		 * ・メソッドの戻り値を変更する
-		 * ・予約履歴フォームにキャンセル待ちIDの値が設定されていたら、ヒットするキャンセル待ちの削除
-		 * ・共通カラム自体を親Entityクラス作って、各エンティティはそれを継承するようにする。
-		 * 　それと、登録、更新時の登録日時、更新日時の自動設定もアノテーションとかで出来るっぽい。
-		 *
-		 */
+	public void register(YoyakuRirekiForm yoyakuRirekiForm) {
 		YoyakuRireki yoyakuRegisterInfo = new YoyakuRireki();
 		// 画面から選択された値を設定する
 		setYoyakuInfoFromScreen(yoyakuRegisterInfo, yoyakuRirekiForm);
 		// 予約履歴IDの生成
 		yoyakuRegisterInfo
-				.setYoyakuRirekiId(saibanServiceImpl.createId(YoyakuRirekiConst.YOYAKURIREKI_ID, loginUserName));
-		// 共通カラムの設定
-		/*UtilColumn utilColumnVal = utilColumnServiceImpl.createUtilColumnValue(loginUserName);
-		yoyakuRegisterInfo.setCreateBy(utilColumnVal.getCreateBy());
-		yoyakuRegisterInfo.setUpdateBy(utilColumnVal.getUpdateBy());
-		yoyakuRegisterInfo.setCreateTime(utilColumnVal.getCreateTime());
-		yoyakuRegisterInfo.setUpdateTime(utilColumnVal.getUpdateTime());*/
+				.setYoyakuRirekiId(saibanServiceImpl.createId(YoyakuRirekiConst.YOYAKURIREKI_ID));
 		// 予約履歴テーブルへ登録
 		yoyakuRirekiRepository.save(yoyakuRegisterInfo);
+		// 予約履歴フォームにキャンセル待ちIDの値が設定されていた場合、紐づくキャンセル待ちの削除
+		if (yoyakuRirekiForm.getWaitingListHistoryId() != null
+				&& !(yoyakuRirekiForm.getWaitingListHistoryId().isEmpty())) {
+			waitingListHistoryRepository.deleteById(yoyakuRirekiForm.getWaitingListHistoryId());
+		}
 	}
 
 	/**
@@ -124,16 +117,13 @@ public class YoyakuServiceImpl implements YoyakuService {
 		yoyakuRirekiForm.setYoyakuRirekiId(yoyakuInfo.getYoyakuRirekiId());
 	}
 
+	@Transactional
 	@Override
-	public void update(YoyakuRirekiForm yoyakuRirekiForm, String loginUserName) {
+	public void update(YoyakuRirekiForm yoyakuRirekiForm) {
 		// 登録済み情報の取得
 		YoyakuRireki yoyakuInfo = yoyakuRirekiRepository.findByYoyakuRirekiId(yoyakuRirekiForm.getYoyakuRirekiId());
 		// 画面にて選択された値を設定する
 		setYoyakuInfoFromScreen(yoyakuInfo, yoyakuRirekiForm);
-		// 共通カラムの設定
-		UtilColumn utilColumnVal = utilColumnServiceImpl.createUtilColumnValue(loginUserName);
-		yoyakuInfo.setUpdateBy(utilColumnVal.getUpdateBy());
-		yoyakuInfo.setUpdateTime(utilColumnVal.getUpdateTime());
 		// 予約履歴テーブルを更新
 		yoyakuRirekiRepository.save(yoyakuInfo);
 	}

@@ -29,6 +29,16 @@
 	background-color: #ccff00;
 }
 
+.btn-Tomato {
+	color: white;
+	background-color: #ff6347;
+}
+
+.btn-Tomato:hover {
+	color: white;
+	background-color: #ffa347;
+}
+
 /* Off-Canvas(SideBar) */
 .offcanvas {
 	width: 200px;

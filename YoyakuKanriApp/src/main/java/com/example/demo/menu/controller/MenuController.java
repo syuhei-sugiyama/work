@@ -70,7 +70,7 @@ public class MenuController {
 		/*
 		 * 採番テーブルを使った、メニューIDの生成
 		 */
-		formMenu.setMenuId(saibanServiceImpl.createId("MN", loginUser.getName()));
+		formMenu.setMenuId(saibanServiceImpl.createId("MN"));
 		/*
 		 * 共通機能を使った、作成日時などの4つのカラムの値生成
 		 */

@@ -4,7 +4,8 @@ import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.validation.constraints.Size;
+
+import com.example.demo.util.entity.BaseEntity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +13,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class WaitingListHistory {
+public class WaitingListHistory extends BaseEntity {
 
 	@Id
 	private String waitingListHistoryId;
@@ -26,14 +27,4 @@ public class WaitingListHistory {
 	private Date endDate;
 
 	private String menus;
-
-	@Size(max = 6)
-	private String createBy;
-
-	private Date createTime;
-
-	@Size(max = 6)
-	private String updateBy;
-
-	private Date updateTime;
 }

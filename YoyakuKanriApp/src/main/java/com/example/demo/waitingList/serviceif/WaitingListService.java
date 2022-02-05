@@ -8,7 +8,7 @@ public interface WaitingListService {
 
 	WaitingListForm prepareItemOfRegisterScreen(WaitingListForm waitingListForm);
 
-	void register(WaitingListForm waitingListForm, String loginUserName);
+	void register(WaitingListForm waitingListForm);
 
 	/**
 	 * [機能] キャンセル待ち情報をフォームにセットする
@@ -20,9 +20,8 @@ public interface WaitingListService {
 	/**
 	 * [機能] キャンセル待ちを更新する
 	 * @param waitingListForm フォーム
-	 * @param loginUserName ログインユーザ名
 	 */
-	void updateWaitingList(WaitingListForm waitingListForm, String loginUserName);
+	void updateWaitingList(WaitingListForm waitingListForm);
 
 	/**
 	 * [機能] キャンセル待ちを削除する

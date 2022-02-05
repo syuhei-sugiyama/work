@@ -5,13 +5,13 @@ import java.util.List;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.login.model.Users;
 import com.example.demo.login.util.Role;
 import com.example.demo.user.UserConst;
 import com.example.demo.user.repository.UserRepository;
 import com.example.demo.user.serviceif.UserService;
-import com.example.demo.util.model.UtilColumn;
 import com.example.demo.util.service.SaibanServiceImpl;
 import com.example.demo.util.service.UtilColumnServiceImpl;
 
@@ -44,16 +44,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void addUser(Users userInfo, String loginUser) {
+	public void addUser(Users userInfo) {
 		// 採番テーブルを使った、ユーザIDの生成
-		userInfo.setUserId(saibanServiceImpl.createId(UserConst.USER_ID, loginUser));
-
-		// 共通カラムの値生成
-		UtilColumn utilColumnVal = utilColumnServiceImpl.createUtilColumnValue(loginUser);
-		userInfo.setCreateBy(utilColumnVal.getCreateBy());
-		userInfo.setCreateTime(utilColumnVal.getCreateTime());
-		userInfo.setUpdateBy(utilColumnVal.getUpdateBy());
-		userInfo.setUpdateTime(utilColumnVal.getUpdateTime());
+		userInfo.setUserId(saibanServiceImpl.createId(UserConst.USER_ID));
 
 		// パスワードの暗号化
 		userInfo.setPassword(passwordEncoder.encode(userInfo.getPassword()));
@@ -82,11 +75,6 @@ public class UserServiceImpl implements UserService {
 		} else {
 			user.setRole(Role.USER.name());
 		}
-		// 更新者、更新日時の更新
-		UtilColumn utilColumnVal = utilColumnServiceImpl.createUtilColumnValue(loginUser);
-		user.setUpdateBy(utilColumnVal.getUpdateBy());
-		user.setUpdateTime(utilColumnVal.getUpdateTime());
-
 		// ユーザテーブルを更新
 		userRepository.save(user);
 	}
@@ -94,6 +82,25 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void deleteUser(String userId) {
 		userRepository.deleteById(userId);
+	}
+
+	@Transactional
+	@Override
+	public void registerOfSystemUser() {
+		Users userInfo = new Users();
+		// システムユーザのID/Passwordは固定
+		userInfo.setUserId(UserConst.SYSTEM_USER_ID);
+		userInfo.setPassword(UserConst.SYSTEM_USER_PASSWORD);
+		// パスワードの暗号化
+		userInfo.setPassword(passwordEncoder.encode(userInfo.getPassword()));
+		// Admin設定
+		userInfo.setAdmin(true);
+		userInfo.setRole(Role.ADMIN.name());
+		// 作成者、更新者
+		userInfo.setCreateBy(UserConst.SYSTEM_USER_ID);
+		userInfo.setUpdateBy(UserConst.SYSTEM_USER_ID);
+		// ユーザテーブルへ登録
+		userRepository.save(userInfo);
 	}
 
 }

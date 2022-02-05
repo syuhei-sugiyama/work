@@ -1,7 +1,6 @@
 package com.example.demo.yoyaku.controller;
 
 import org.springframework.beans.BeanUtils;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -39,12 +38,12 @@ public class YoyakuController {
 
 	@PostMapping("/register")
 	public String register(@Validated @ModelAttribute("yoyakuInfo") YoyakuRirekiForm yoyakuRirekiForm, Model model,
-			BindingResult result, Authentication loginUser) {
+			BindingResult result) {
 		if (result.hasErrors()) {
 			return "yoyaku/add";
 		}
 		// 登録処理
-		yoyakuServiceImpl.register(yoyakuRirekiForm, loginUser.getName());
+		yoyakuServiceImpl.register(yoyakuRirekiForm);
 
 		return "redirect:/";
 	}
@@ -61,12 +60,12 @@ public class YoyakuController {
 
 	@PostMapping("/update")
 	public String updateYoyaku(@Validated @ModelAttribute("yoyakuInfo") YoyakuRirekiForm yoyakuRirekiForm, Model model,
-			BindingResult result, Authentication loginUser) {
+			BindingResult result) {
 		if (result.hasErrors()) {
 			return "yoyaku/edit";
 		}
 		// 更新処理
-		yoyakuServiceImpl.update(yoyakuRirekiForm, loginUser.getName());
+		yoyakuServiceImpl.update(yoyakuRirekiForm);
 		return "redirect:/";
 	}
 

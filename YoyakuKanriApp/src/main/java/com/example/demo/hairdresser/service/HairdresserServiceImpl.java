@@ -30,7 +30,7 @@ public class HairdresserServiceImpl implements HairdresserService {
 	public void addHairdresser(Hairdresser hairdresserForm, String loginUserName) {
 		// 採番テーブルを使った、美容師IDの生成
 		hairdresserForm
-				.setHairdresserId(saibanServiceImpl.createId(HairdresserConst.HAIRDRESSER_ID, loginUserName));
+				.setHairdresserId(saibanServiceImpl.createId(HairdresserConst.HAIRDRESSER_ID));
 
 		// 共通カラムの値生成
 		UtilColumn utilColumnVal = utilColumnServiceImpl.createUtilColumnValue(loginUserName);

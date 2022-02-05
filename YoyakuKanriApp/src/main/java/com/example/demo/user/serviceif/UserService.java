@@ -8,9 +8,11 @@ public interface UserService {
 
 	List<Users> findByUserId(String userId);
 
-	void addUser(Users userInfo, String loginUser);
+	void addUser(Users userInfo);
 
 	void updateUser(Users userInfo, String loginUser);
 
 	void deleteUser(String userId);
+
+	void registerOfSystemUser();
 }

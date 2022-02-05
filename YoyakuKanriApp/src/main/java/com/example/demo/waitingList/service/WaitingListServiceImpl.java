@@ -6,13 +6,12 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.hairdresser.service.HairdresserServiceImpl;
 import com.example.demo.menu.service.MenuServiceImpl;
 import com.example.demo.util.constant.UtilServiceConst;
-import com.example.demo.util.model.UtilColumn;
 import com.example.demo.util.service.SaibanServiceImpl;
-import com.example.demo.util.service.UtilColumnServiceImpl;
 import com.example.demo.util.service.UtilServiceImpl;
 import com.example.demo.waitingList.WaitingListConst;
 import com.example.demo.waitingList.model.WaitingListForm;
@@ -37,8 +36,6 @@ public class WaitingListServiceImpl implements WaitingListService {
 	private final UtilServiceImpl utilServiceImpl;
 
 	private final SaibanServiceImpl saibanServiceImpl;
-
-	private final UtilColumnServiceImpl utilColumnServiceImpl;
 
 	/**
 	 * [機能] 全てのキャンセル待ち情報をjson形式のStringにして返す
@@ -84,22 +81,16 @@ public class WaitingListServiceImpl implements WaitingListService {
 	/**
 	 * [機能] キャンセル待ち情報を登録する
 	 * @param waitingListForm 画面から入力されたキャンセル待ち情報
-	 * @param loginUserName ログインユーザ名
 	 */
+	@Transactional
 	@Override
-	public void register(WaitingListForm waitingListForm, String loginUserName) {
+	public void register(WaitingListForm waitingListForm) {
 		WaitingListHistory registerEntity = new WaitingListHistory();
 		// 画面から選択された値を設定
 		setWaitingListInfoFromScreen(registerEntity, waitingListForm);
 		// キャンセル待ち履歴IDの生成
 		registerEntity.setWaitingListHistoryId(
-				saibanServiceImpl.createId(WaitingListConst.WAITING_LIST_HISTORY_ID, loginUserName));
-		// 共通カラムの設定
-		UtilColumn utilColumnVal = utilColumnServiceImpl.createUtilColumnValue(loginUserName);
-		registerEntity.setCreateBy(utilColumnVal.getCreateBy());
-		registerEntity.setUpdateBy(utilColumnVal.getUpdateBy());
-		registerEntity.setCreateTime(utilColumnVal.getCreateTime());
-		registerEntity.setUpdateTime(utilColumnVal.getUpdateTime());
+				saibanServiceImpl.createId(WaitingListConst.WAITING_LIST_HISTORY_ID));
 		// キャンセル待ち履歴テーブルへ登録
 		waitingListHistoryRepository.save(registerEntity);
 	}
@@ -159,17 +150,14 @@ public class WaitingListServiceImpl implements WaitingListService {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Transactional
 	@Override
-	public void updateWaitingList(WaitingListForm waitingListForm, String loginUserName) {
+	public void updateWaitingList(WaitingListForm waitingListForm) {
 		// 登録済み情報の取得
 		WaitingListHistory waitingListInfo = waitingListHistoryRepository
 				.findByWaitingListHistoryId(waitingListForm.getWaitingListHistoryId());
 		// 画面にて入力された値を設定する
 		setWaitingListInfoFromScreen(waitingListInfo, waitingListForm);
-		// 共通カラムの設定
-		UtilColumn utilColumnVal = utilColumnServiceImpl.createUtilColumnValue(loginUserName);
-		waitingListInfo.setUpdateBy(utilColumnVal.getUpdateBy());
-		waitingListInfo.setUpdateTime(utilColumnVal.getUpdateTime());
 		// キャンセル待ち履歴テーブルを更新
 		waitingListHistoryRepository.save(waitingListInfo);
 	}

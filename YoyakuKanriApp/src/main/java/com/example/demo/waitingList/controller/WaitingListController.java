@@ -1,6 +1,5 @@
 package com.example.demo.waitingList.controller;
 
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -40,12 +39,12 @@ public class WaitingListController {
 
 	@PostMapping("/register")
 	public String register(@Validated @ModelAttribute("waitingListInfo") WaitingListForm waitingListForm,
-			BindingResult result, Authentication loginUser) {
+			BindingResult result) {
 		if (result.hasErrors()) {
 			return "waitingList/add";
 		}
 		// 登録処理
-		waitingListServiceImpl.register(waitingListForm, loginUser.getName());
+		waitingListServiceImpl.register(waitingListForm);
 		return "redirect:/waitingList/index";
 	}
 
@@ -59,13 +58,14 @@ public class WaitingListController {
 	}
 
 	@PostMapping("/update")
-	public String updateWaitingList(@Validated(UpdateGroup.class) @ModelAttribute("waitingListInfo") WaitingListForm waitingListForm,
-			BindingResult result, Authentication loginUser) {
+	public String updateWaitingList(
+			@Validated(UpdateGroup.class) @ModelAttribute("waitingListInfo") WaitingListForm waitingListForm,
+			BindingResult result) {
 		if (result.hasErrors()) {
 			return "waitingList/edit";
 		}
 		// 更新処理
-		waitingListServiceImpl.updateWaitingList(waitingListForm, loginUser.getName());
+		waitingListServiceImpl.updateWaitingList(waitingListForm);
 		return "redirect:/waitingList/index";
 	}
 

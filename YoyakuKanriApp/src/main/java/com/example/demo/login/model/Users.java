@@ -1,17 +1,19 @@
 package com.example.demo.login.model;
 
-import java.util.Date;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
-import lombok.Data;
+import com.example.demo.util.entity.BaseEntity;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
-@Data
-public class Users {
+@Getter
+@Setter
+public class Users extends BaseEntity{
 
 	public interface AddGroup {}
 
@@ -20,7 +22,7 @@ public class Users {
 	public interface DeleteGroup {}
 
 	@Id
-	@Size(max = 5)
+	@Size(max = 6)
 	@NotEmpty(groups = {UpdateGroup.class, DeleteGroup.class})
 	private String userId;
 
@@ -30,14 +32,4 @@ public class Users {
 	private boolean admin;
 
 	private String role;
-
-	@Size(max = 6)
-	private String createBy;
-
-	private Date createTime;
-
-	@Size(max = 6)
-	private String updateBy;
-
-	private Date updateTime;
 }

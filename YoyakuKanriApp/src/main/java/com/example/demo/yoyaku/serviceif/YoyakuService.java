@@ -6,13 +6,13 @@ public interface YoyakuService {
 
 	YoyakuRirekiForm init(YoyakuRirekiForm yoyakuRirekiForm);
 
-	void register(YoyakuRirekiForm yoyakuRirekiForm, String loginUserName);
+	void register(YoyakuRirekiForm yoyakuRirekiForm);
 
 	String getAllYoyaku();
 
 	void getYoyakuById(YoyakuRirekiForm yoyakuRirekiForm, String yoyakuRirekiId);
 
-	void update(YoyakuRirekiForm yoyakuRirekiForm, String loginUserName);
+	void update(YoyakuRirekiForm yoyakuRirekiForm);
 
 	void delete(String yoyakuRirekiId);
 

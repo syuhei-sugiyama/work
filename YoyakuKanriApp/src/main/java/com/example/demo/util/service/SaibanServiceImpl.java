@@ -1,9 +1,10 @@
 package com.example.demo.util.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.util.constant.SaibanServiceConst;
 import com.example.demo.util.model.Saiban;
-import com.example.demo.util.model.UtilColumn;
 import com.example.demo.util.repository.SaibanRepository;
 import com.example.demo.util.serviceif.SaibanService;
 
@@ -15,19 +16,13 @@ public class SaibanServiceImpl implements SaibanService {
 
 	private final SaibanRepository saibanRepository;
 
-	private final UtilColumnServiceImpl utilColumnServiceImpl;
-
-
 	/**
 	 * 採番キー毎の番号を生成する
 	 */
+	@Transactional
 	@Override
-	public String createId(String saibanKey, String torokuUser) {
-		/*
-		 * 共通カラムの値生成用のサービス呼び出し
-		 */
-		UtilColumn utilColumnVal = utilColumnServiceImpl.createUtilColumnValue(torokuUser);
-
+	public String createId(String saibanKey) {
+		// 採番テーブル検索
 		Saiban saiban = saibanRepository.findBySaibanId(saibanKey);
 
 		if (saiban == null) {
@@ -37,27 +32,19 @@ public class SaibanServiceImpl implements SaibanService {
 			 */
 			Saiban newSaiban = new Saiban();
 			newSaiban.setSaibanId(saibanKey);
-			newSaiban.setCurrentNumber((long) 1);
-
-			newSaiban.setCreateBy(utilColumnVal.getCreateBy());
-			newSaiban.setUpdateBy(utilColumnVal.getUpdateBy());
-			newSaiban.setCreateTime(utilColumnVal.getCreateTime());
-			newSaiban.setUpdateTime(utilColumnVal.getUpdateTime());
+			newSaiban.setCurrentNumber(SaibanServiceConst.initSaibanNum);
 
 			/*
 			 * 採番テーブルへの初回登録
 			 */
 			saibanRepository.save(newSaiban);
-			return newSaiban.getSaibanId() + "1";
+			return newSaiban.getSaibanId() + newSaiban.getCurrentNumber().toString();
 		} else if (!(saiban.getSaibanId().isEmpty())) {
 			/*
 			 * 採番キーのレコードが存在する場合
-			 * 現在番号を更新する
+			 * 現在番号を1ずつカウントアップ
 			 */
-			saiban.setCurrentNumber(saiban.getCurrentNumber() + 1);
-			saiban.setUpdateBy(utilColumnVal.getUpdateBy());
-			saiban.setUpdateTime(utilColumnVal.getUpdateTime());
-
+			saiban.setCurrentNumber(saiban.getCurrentNumber() + SaibanServiceConst.initSaibanNum);
 			/*
 			 * 採番テーブルの更新
 			 */

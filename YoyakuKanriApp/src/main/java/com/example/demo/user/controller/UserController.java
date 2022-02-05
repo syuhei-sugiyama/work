@@ -48,17 +48,12 @@ public class UserController {
 
 	@PostMapping("/add")
 	public String add(@Validated @ModelAttribute("user") Users user, Model model,
-			BindingResult result, Authentication loginUser) {
+			BindingResult result) {
 		if (result.hasErrors()) {
 			return "user/register";
 		}
 		// 登録処理
-		// 初回登録とそれ以外で引数のログインユーザ名を使い分け
-		if (loginUser != null) {
-			userServiceImpl.addUser(user, loginUser.getName());
-		} else {
-			userServiceImpl.addUser(user, "SYSTEM");
-		}
+		userServiceImpl.addUser(user);
 		return "redirect:/user/index";
 	}
 
@@ -96,5 +91,11 @@ public class UserController {
 		// ユーザ削除
 		userServiceImpl.deleteUser(user.getUserId());
 		return "redirect:/user/index";
+	}
+
+	@GetMapping("/registerOfSystemUser")
+	public String registerOfSystemUser() {
+		userServiceImpl.registerOfSystemUser();
+		return "redirect:/";
 	}
 }
