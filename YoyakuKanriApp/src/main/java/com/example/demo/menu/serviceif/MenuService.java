@@ -11,4 +11,8 @@ public interface MenuService {
 	Map<String, String> getAllMenuMap();
 
 	Menus findByMenuId(String menuId);
+
+	void add(Menus formMenu);
+
+	void update(Menus formMenu);
 }

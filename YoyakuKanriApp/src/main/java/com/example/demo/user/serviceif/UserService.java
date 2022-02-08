@@ -10,7 +10,7 @@ public interface UserService {
 
 	void addUser(Users userInfo);
 
-	void updateUser(Users userInfo, String loginUser);
+	void updateUser(Users userInfo);
 
 	void deleteUser(String userId);
 

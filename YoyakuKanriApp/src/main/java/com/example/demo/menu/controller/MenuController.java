@@ -21,9 +21,6 @@ import com.example.demo.menu.model.Menus.AddGroup;
 import com.example.demo.menu.model.Menus.UpdateGroup;
 import com.example.demo.menu.repository.MenusRepository;
 import com.example.demo.menu.service.MenuServiceImpl;
-import com.example.demo.util.model.UtilColumn;
-import com.example.demo.util.service.SaibanServiceImpl;
-import com.example.demo.util.service.UtilColumnServiceImpl;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,10 +30,6 @@ import lombok.RequiredArgsConstructor;
 public class MenuController {
 
 	private final MenusRepository menusRepository;
-
-	private final SaibanServiceImpl saibanServiceImpl;
-
-	private final UtilColumnServiceImpl utilColumnServiceImpl;
 
 	private final MenuServiceImpl menuServiceImpl;
 
@@ -67,22 +60,8 @@ public class MenuController {
 			result.addError(new FieldError(result.getObjectName(), "menuName", "入力されたメニュー名は既に登録されています。"));
 			return "menu/register";
 		}
-		/*
-		 * 採番テーブルを使った、メニューIDの生成
-		 */
-		formMenu.setMenuId(saibanServiceImpl.createId("MN"));
-		/*
-		 * 共通機能を使った、作成日時などの4つのカラムの値生成
-		 */
-		UtilColumn utilColumnVal = utilColumnServiceImpl.createUtilColumnValue(loginUser.getName());
-		formMenu.setCreateBy(utilColumnVal.getCreateBy());
-		formMenu.setCreateTime(utilColumnVal.getCreateTime());
-		formMenu.setUpdateBy(utilColumnVal.getUpdateBy());
-		formMenu.setUpdateTime(utilColumnVal.getUpdateTime());
-		/*
-		 * メニューテーブルへ登録
-		 */
-		menusRepository.save(formMenu);
+		// メニュー登録
+		menuServiceImpl.add(formMenu);
 
 		return "redirect:/menu/index";
 	}
@@ -105,8 +84,7 @@ public class MenuController {
 
 	@GetMapping("/edit/{id}")
 	public String edit(@PathVariable String id, Model model) {
-		Menus editMenu = menusRepository.findByMenuId(id);
-		model.addAttribute("formMenu", editMenu);
+		model.addAttribute("formMenu", menusRepository.findByMenuId(id));
 		return "menu/edit";
 	}
 
@@ -125,31 +103,15 @@ public class MenuController {
 			model.addAttribute("formMenu", formMenu);
 			return "menu/edit";
 		}
-		/*
-		 * 登録済みの更新対象データを取得
-		 */
-		Menus updateMenu = menusRepository.findByMenuId(formMenu.getMenuId());
-
-		// 画面から入力された金額、所要時間をセット
-		updateMenu.setPrice(formMenu.getPrice());
-		updateMenu.setRequiredTime(formMenu.getRequiredTime());
-
-		// 共通機能を使って、更新者、更新日時の値生成
-		UtilColumn utilColumnVal = utilColumnServiceImpl.createUtilColumnValue(loginUser.getName());
-		// 更新者、更新日時をセット
-		updateMenu.setUpdateBy(utilColumnVal.getUpdateBy());
-		updateMenu.setUpdateTime(utilColumnVal.getUpdateTime());
-
-		// メニューテーブルの更新
-		menusRepository.save(updateMenu);
+		// メニュー更新
+		menuServiceImpl.update(formMenu);
 
 		return "redirect:/menu/index";
 	}
 
 	@GetMapping("/delete/{id}")
 	public String deleteConfirmation(@PathVariable String id, Model model) {
-		Menus deleteMenu = menusRepository.findByMenuId(id);
-		model.addAttribute("deleteMenu", deleteMenu);
+		model.addAttribute("deleteMenu", menusRepository.findByMenuId(id));
 		return "menu/delete";
 	}
 

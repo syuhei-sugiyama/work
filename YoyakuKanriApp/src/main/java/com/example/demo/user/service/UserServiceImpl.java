@@ -13,7 +13,6 @@ import com.example.demo.user.UserConst;
 import com.example.demo.user.repository.UserRepository;
 import com.example.demo.user.serviceif.UserService;
 import com.example.demo.util.service.SaibanServiceImpl;
-import com.example.demo.util.service.UtilColumnServiceImpl;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,8 +23,6 @@ public class UserServiceImpl implements UserService {
 	private final UserRepository userRepository;
 
 	private final SaibanServiceImpl saibanServiceImpl;
-
-	private final UtilColumnServiceImpl utilColumnServiceImpl;
 
 	private final BCryptPasswordEncoder passwordEncoder;
 
@@ -63,7 +60,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void updateUser(Users userInfo, String loginUser) {
+	public void updateUser(Users userInfo) {
 		// 既存の情報取得
 		Users user = userRepository.findByUserId(userInfo.getUserId());
 

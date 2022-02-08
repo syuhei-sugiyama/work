@@ -1,5 +1,5 @@
 package com.example.demo.login;
 
-public class Sample {
+public class LoginConst {
 
 }
