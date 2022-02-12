@@ -3,7 +3,6 @@ package com.example.demo.hairdresser.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -63,7 +62,7 @@ public class HairdresserController {
 
 	@PostMapping("/add")
 	public String add(@Validated(AddGroup.class) @ModelAttribute("formInfo") Hairdresser hairdresser,
-			BindingResult result, Model model, Authentication loginUser) {
+			BindingResult result, Model model) {
 		// フォーム精査エラー
 		if (result.hasErrors()) {
 			model.addAttribute("formInfo", hairdresser);
@@ -78,7 +77,7 @@ public class HairdresserController {
 		}
 
 		// 美容師情報登録
-		hairdresserServiceImpl.addHairdresser(hairdresser, loginUser.getName());
+		hairdresserServiceImpl.addHairdresser(hairdresser);
 
 		return "redirect:/hairdresser/index";
 	}
@@ -91,7 +90,7 @@ public class HairdresserController {
 
 	@PostMapping("/update")
 	public String update(@Validated(UpdateGroup.class) @ModelAttribute("formInfo") Hairdresser hairdresser,
-			BindingResult result, Model model, Authentication loginUser) {
+			BindingResult result, Model model) {
 		// フォーム精査エラー
 		if (result.hasErrors()) {
 			model.addAttribute("formInfo", hairdresser);
@@ -108,7 +107,7 @@ public class HairdresserController {
 		}
 
 		// 美容師情報更新
-		hairdresserServiceImpl.updateHairdresser(hairdresser, loginUser.getName());
+		hairdresserServiceImpl.updateHairdresser(hairdresser);
 
 		return "redirect:/hairdresser/index";
 	}

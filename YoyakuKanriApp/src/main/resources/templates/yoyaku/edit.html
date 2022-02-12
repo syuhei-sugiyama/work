@@ -139,6 +139,19 @@
 						<button class="w-100 btn btn-navy" type="submit">更新</button>
 					</form>
 					<button id="delete" class="w-100 btn btn-danger mt-1">削除</button>
+					<form th:object="${yoyakuInfo}"
+						th:action="@{/waitingList/convertToWaitingList}" method="post"
+						novalidate>
+						<input type="hidden" th:field="*{date}">
+						<input type="hidden" th:field="*{startTime}">
+						<input type="hidden" th:field="*{endTime}">
+						<input type="hidden" th:field="*{customer}">
+						<input type="hidden" th:field="*{selectHairdresserId}">
+						<input type="hidden" th:field="*{selectMenuId}">
+						<input type="hidden" th:field="*{yoyakuRirekiId}">
+						<button class="w-100 btn btn-springGreen mt-1" type="submit">
+							キャンセル待ち登録画面へ移動</button>
+					</form>
 				</div>
 			</div>
 		</div>

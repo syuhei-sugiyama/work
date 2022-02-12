@@ -1,5 +1,6 @@
 package com.example.demo.waitingList.controller;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.example.demo.waitingList.model.WaitingListForm;
 import com.example.demo.waitingList.model.WaitingListForm.UpdateGroup;
 import com.example.demo.waitingList.service.WaitingListServiceImpl;
+import com.example.demo.yoyaku.model.YoyakuRirekiForm;
 
 import lombok.RequiredArgsConstructor;
 
@@ -77,5 +79,16 @@ public class WaitingListController {
 		// 削除処理
 		waitingListServiceImpl.deleteWaitingList(waitingListHistoryId);
 		return "redirect:/waitingList/index";
+	}
+
+	@PostMapping("/convertToWaitingList")
+	public String convertYoyakuToWList(YoyakuRirekiForm yoyakuRirekiForm, Model model, BindingResult result) {
+		if (result.hasErrors()) {
+			return "yoyaku/edit";
+		}
+		WaitingListForm waitingListForm = new WaitingListForm();
+		BeanUtils.copyProperties(yoyakuRirekiForm, waitingListForm);
+		model.addAttribute("waitingListInfo", waitingListServiceImpl.prepareItemOfRegisterScreen(waitingListForm));
+		return "waitingList/add";
 	}
 }

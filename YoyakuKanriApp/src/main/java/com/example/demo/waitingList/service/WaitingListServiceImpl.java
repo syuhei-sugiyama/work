@@ -19,6 +19,7 @@ import com.example.demo.waitingList.model.WaitingListHistory;
 import com.example.demo.waitingList.model.WaitingListInfo;
 import com.example.demo.waitingList.repository.WaitingListHistoryRepository;
 import com.example.demo.waitingList.serviceif.WaitingListService;
+import com.example.demo.yoyaku.repository.YoyakuRirekiRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,8 @@ public class WaitingListServiceImpl implements WaitingListService {
 	private final UtilServiceImpl utilServiceImpl;
 
 	private final SaibanServiceImpl saibanServiceImpl;
+
+	private final YoyakuRirekiRepository yoyakuRirekiRepository;
 
 	/**
 	 * [機能] 全てのキャンセル待ち情報をjson形式のStringにして返す
@@ -93,6 +96,10 @@ public class WaitingListServiceImpl implements WaitingListService {
 				saibanServiceImpl.createId(WaitingListConst.WAITING_LIST_HISTORY_ID));
 		// キャンセル待ち履歴テーブルへ登録
 		waitingListHistoryRepository.save(registerEntity);
+		// キャンセル待ち履歴フォームに予約履歴IDの値が設定されていた場合、紐づく予約を削除
+		if (waitingListForm.getYoyakuRirekiId() != null && !(waitingListForm.getYoyakuRirekiId().isEmpty())) {
+			yoyakuRirekiRepository.deleteById(waitingListForm.getYoyakuRirekiId());
+		}
 	}
 
 	/**
