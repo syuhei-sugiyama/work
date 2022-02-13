@@ -6,6 +6,9 @@ import javax.validation.constraints.NotEmpty;
 
 import lombok.Data;
 
+/**
+ * 【機能】予約登録画面で使用するフォームクラス
+ */
 @Data
 public class YoyakuRirekiForm {
 

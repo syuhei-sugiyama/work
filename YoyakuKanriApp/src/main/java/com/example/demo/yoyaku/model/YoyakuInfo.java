@@ -2,6 +2,9 @@ package com.example.demo.yoyaku.model;
 
 import lombok.Data;
 
+/**
+ * 【機能】予約情報をfullcalendarへ渡す時のフォーマットクラス
+ */
 @Data
 public class YoyakuInfo {
 

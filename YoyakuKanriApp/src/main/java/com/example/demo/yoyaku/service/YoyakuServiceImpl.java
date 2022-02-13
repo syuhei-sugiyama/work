@@ -18,6 +18,7 @@ import com.example.demo.yoyaku.YoyakuRirekiConst;
 import com.example.demo.yoyaku.model.YoyakuInfo;
 import com.example.demo.yoyaku.model.YoyakuRireki;
 import com.example.demo.yoyaku.model.YoyakuRirekiForm;
+import com.example.demo.yoyaku.model.YoyakuScreenSelectionItems;
 import com.example.demo.yoyaku.repository.YoyakuRirekiRepository;
 import com.example.demo.yoyaku.serviceif.YoyakuService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -41,11 +42,15 @@ public class YoyakuServiceImpl implements YoyakuService {
 
 	private final WaitingListHistoryRepository waitingListHistoryRepository;
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public YoyakuRirekiForm init(YoyakuRirekiForm yoyakuRirekiForm) {
-		yoyakuRirekiForm.setMenus(menuServiceImpl.getAllMenuMap());
-		yoyakuRirekiForm.setHairdressers(HairdresserServiceImpl.getAllHairdresserMap());
-		return yoyakuRirekiForm;
+	public YoyakuScreenSelectionItems getScreenItems() {
+		YoyakuScreenSelectionItems yoyakuScreenItemsForm = new YoyakuScreenSelectionItems();
+		yoyakuScreenItemsForm.setMenus(menuServiceImpl.getAllMenuMap());
+		yoyakuScreenItemsForm.setHairdressers(HairdresserServiceImpl.getAllHairdresserMap());
+		return yoyakuScreenItemsForm;
 	}
 
 	@Transactional

@@ -32,7 +32,8 @@ public class YoyakuController {
 		String[] dateTimeArr = dateTime.split(" ");
 		yoyakuRirekiForm.setDate(dateTimeArr[0]);
 		yoyakuRirekiForm.setStartTime(dateTimeArr[1]);
-		model.addAttribute("yoyakuInfo", yoyakuServiceImpl.init(yoyakuRirekiForm));
+		model.addAttribute("yoyakuInfo", yoyakuRirekiForm);
+		model.addAttribute("screenItems", yoyakuServiceImpl.getScreenItems());
 		return "yoyaku/add";
 	}
 
@@ -50,11 +51,11 @@ public class YoyakuController {
 
 	@GetMapping("/edit/{yoyakuId}")
 	public String editYoyaku(Model model, @PathVariable String yoyakuId) {
-		// 画面に表示する項目の値取得する
 		// カレンダーで選択された予約情報を取得して、編集画面で表示する
 		YoyakuRirekiForm yoyakuRirekiForm = new YoyakuRirekiForm();
 		yoyakuServiceImpl.getYoyakuById(yoyakuRirekiForm, yoyakuId);
-		model.addAttribute("yoyakuInfo", yoyakuServiceImpl.init(yoyakuRirekiForm));
+		model.addAttribute("yoyakuInfo", yoyakuRirekiForm);
+		model.addAttribute("screenItems", yoyakuServiceImpl.getScreenItems());
 		return "yoyaku/edit";
 	}
 
@@ -96,7 +97,8 @@ public class YoyakuController {
 		}
 		YoyakuRirekiForm yoyakuRirekiForm = new YoyakuRirekiForm();
 		BeanUtils.copyProperties(waitingListForm, yoyakuRirekiForm);
-		model.addAttribute("yoyakuInfo", yoyakuServiceImpl.init(yoyakuRirekiForm));
+		model.addAttribute("yoyakuInfo", yoyakuRirekiForm);
+		model.addAttribute("screenItems", yoyakuServiceImpl.getScreenItems());
 		return "yoyaku/add";
 	}
 }

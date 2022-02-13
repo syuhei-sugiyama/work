@@ -119,7 +119,7 @@
 							担当
 							<div>
 								<select th:field="*{selectHairdresserId}">
-									<th:block th:each="hairdresser : *{hairdressers}">
+									<th:block th:each="hairdresser : ${screenItems.hairdressers}">
 										<option th:value="${hairdresser.key}"
 											th:text="${hairdresser.value}"></option>
 									</th:block>
@@ -128,7 +128,7 @@
 						</div>
 
 						<div class="mb-3">
-							メニュー <label class="ms-2 form-check" th:each="menu : *{menus}">
+							メニュー <label class="ms-2 form-check" th:each="menu : ${screenItems.menus}">
 								<input type="checkbox" th:value="${menu.key}"
 								th:text="${menu.value}" th:field="${yoyakuInfo.selectMenuId}">
 							</label>
