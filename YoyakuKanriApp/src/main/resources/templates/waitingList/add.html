@@ -6,16 +6,6 @@
 <meta charset="UTF-8" th:remove="tag">
 <script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
 <title>キャンセル待ち登録画面</title>
-<script>
-/* ページ読み込み時に、チェックボックスのチェックを全て外す
- * input type="checkbox"に対して、th:fieldを使用した際の弊害を解消する為
- */
-	/* $(document).ready(
-			function() {
-				$('input[type="checkbox"]').removeAttr('checked').prop(
-						'checked', false).change();
-			}); */
-</script>
 </head>
 <body>
 
@@ -66,7 +56,7 @@
 							担当
 							<div>
 								<select th:field="*{selectHairdresserId}">
-									<th:block th:each="hairdresser : *{hairdressers}">
+									<th:block th:each="hairdresser : ${screenItems.hairdressers}">
 										<option th:value="${hairdresser.key}"
 											th:text="${hairdresser.value}"></option>
 									</th:block>
@@ -75,7 +65,7 @@
 						</div>
 
 						<div class="mb-3">
-							メニュー <label class="ms-2 form-check" th:each="menu : *{menus}">
+							メニュー <label class="ms-2 form-check" th:each="menu : ${screenItems.menus}">
 								<input type="checkbox" th:value="${menu.key}"
 								th:text="${menu.value}" th:field="*{selectMenuId}">
 							</label>

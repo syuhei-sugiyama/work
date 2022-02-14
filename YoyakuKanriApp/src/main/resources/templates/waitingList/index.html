@@ -49,7 +49,9 @@
 				if(confirm('キャンセル待ち登録画面へ移動しますか？')) {
 					window.location.href = "http://localhost:8080/waitingList/add/" + dateToStr24HPad0(new Date(info.date), 'YYYY-MM-DD hh:mm');
 				}
-			}
+			},
+			// カレンダーをスクロール無しで表示
+			contentHeight : 'auto'
 		});
 		// 画面にレンダリング
 		calendar.render();

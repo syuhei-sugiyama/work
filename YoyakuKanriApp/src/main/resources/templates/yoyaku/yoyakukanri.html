@@ -50,8 +50,8 @@
 					window.location.href = "http://localhost:8080/yoyaku/add/" + dateToStr24HPad0(new Date(info.date), 'YYYY-MM-DD hh:mm');
 				}
 			},
-			eventDidMount : function(arg) {
-			}
+			// カレンダーをスクロール無しで表示
+			contentHeight : 'auto'
 		});
 		// 画面にレンダリング
 		calendar.render();

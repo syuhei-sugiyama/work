@@ -35,7 +35,8 @@ public class WaitingListController {
 		String[] dateTimeArr = dateTime.split(" ");
 		waitingListForm.setDate(dateTimeArr[0]);
 		waitingListForm.setStartTime(dateTimeArr[1]);
-		model.addAttribute("waitingListInfo", waitingListServiceImpl.prepareItemOfRegisterScreen(waitingListForm));
+		model.addAttribute("waitingListInfo", waitingListForm);
+		model.addAttribute("screenItems", waitingListServiceImpl.getScreenItems());
 		return "waitingList/add";
 	}
 
@@ -55,7 +56,8 @@ public class WaitingListController {
 		// カレンダーで選択されたキャンセル待ち情報を取得して、編集画面に表示する
 		WaitingListForm waitingListForm = new WaitingListForm();
 		waitingListServiceImpl.setWaitingListInfoToForm(waitingListForm, waitingListHistoryId);
-		model.addAttribute("waitingListInfo", waitingListServiceImpl.prepareItemOfRegisterScreen(waitingListForm));
+		model.addAttribute("waitingListInfo", waitingListForm);
+		model.addAttribute("screenItems", waitingListServiceImpl.getScreenItems());
 		return "waitingList/edit";
 	}
 
@@ -88,7 +90,8 @@ public class WaitingListController {
 		}
 		WaitingListForm waitingListForm = new WaitingListForm();
 		BeanUtils.copyProperties(yoyakuRirekiForm, waitingListForm);
-		model.addAttribute("waitingListInfo", waitingListServiceImpl.prepareItemOfRegisterScreen(waitingListForm));
+		model.addAttribute("waitingListInfo", waitingListForm);
+		model.addAttribute("screenItems", waitingListServiceImpl.getScreenItems());
 		return "waitingList/add";
 	}
 }

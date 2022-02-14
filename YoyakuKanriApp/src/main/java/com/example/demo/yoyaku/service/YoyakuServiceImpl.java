@@ -32,7 +32,7 @@ public class YoyakuServiceImpl implements YoyakuService {
 
 	private final MenuServiceImpl menuServiceImpl;
 
-	private final HairdresserServiceImpl HairdresserServiceImpl;
+	private final HairdresserServiceImpl hairdresserServiceImpl;
 
 	private final SaibanServiceImpl saibanServiceImpl;
 
@@ -49,7 +49,7 @@ public class YoyakuServiceImpl implements YoyakuService {
 	public YoyakuScreenSelectionItems getScreenItems() {
 		YoyakuScreenSelectionItems yoyakuScreenItemsForm = new YoyakuScreenSelectionItems();
 		yoyakuScreenItemsForm.setMenus(menuServiceImpl.getAllMenuMap());
-		yoyakuScreenItemsForm.setHairdressers(HairdresserServiceImpl.getAllHairdresserMap());
+		yoyakuScreenItemsForm.setHairdressers(hairdresserServiceImpl.getAllHairdresserMap());
 		return yoyakuScreenItemsForm;
 	}
 

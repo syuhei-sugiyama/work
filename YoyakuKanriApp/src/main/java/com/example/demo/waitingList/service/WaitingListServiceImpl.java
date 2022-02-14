@@ -14,6 +14,7 @@ import com.example.demo.util.constant.UtilServiceConst;
 import com.example.demo.util.service.SaibanServiceImpl;
 import com.example.demo.util.service.UtilServiceImpl;
 import com.example.demo.waitingList.WaitingListConst;
+import com.example.demo.waitingList.model.WListScreenSelectionItems;
 import com.example.demo.waitingList.model.WaitingListForm;
 import com.example.demo.waitingList.model.WaitingListHistory;
 import com.example.demo.waitingList.model.WaitingListInfo;
@@ -70,15 +71,14 @@ public class WaitingListServiceImpl implements WaitingListService {
 	}
 
 	/**
-	 * [機能] キャンセル待ち登録画面の項目を準備する
-	 * @param waitingListForm キャンセル待ちのフォーム
-	 * @return waitingListForm キャンセル待ち登録画面の項目がセットされたフォーム
+	 * {@inheritDoc}
 	 */
 	@Override
-	public WaitingListForm prepareItemOfRegisterScreen(WaitingListForm waitingListForm) {
-		waitingListForm.setMenus(menuServiceImpl.getAllMenuMap());
-		waitingListForm.setHairdressers(hairdresserServiceImpl.getAllHairdresserMap());
-		return waitingListForm;
+	public WListScreenSelectionItems getScreenItems() {
+		WListScreenSelectionItems wListScreenSelectionItems = new WListScreenSelectionItems();
+		wListScreenSelectionItems.setMenus(menuServiceImpl.getAllMenuMap());
+		wListScreenSelectionItems.setHairdressers(hairdresserServiceImpl.getAllHairdresserMap());
+		return wListScreenSelectionItems;
 	}
 
 	/**
