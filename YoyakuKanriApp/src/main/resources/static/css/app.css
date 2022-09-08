@@ -1,7 +1,8 @@
 /* Color */
 .bg-image {
-	background: linear-gradient(to bottom, rgba(34, 74, 190, 1),
-		rgba(34, 74, 190, 0.7)), url('/img/photo.jpg');
+	/* background: linear-gradient(to bottom, rgba(34, 74, 190, 1),
+		rgba(34, 74, 190, 0.7)), url('/img/biyouin_kabegami.jpg'); */
+	background: url('/img/biyouin_kabegami.jpg');
 	background-size: cover;
 }
 
